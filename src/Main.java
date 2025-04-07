@@ -1,15 +1,23 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import javax.swing.*;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+public class Main {
+    public static final int WINDOW_WIDTH = 1280;
+    public static final int WINDOW_HEIGHT = 720;
+
+
+    public static void main(String[] args) {
+
+        JFrame window = new JFrame("Apocalypse");
+        window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setLocationRelativeTo(null);
+        window.setResizable(false);
+        window.setLayout(null);
+
+        MainScene mainScene = new MainScene(0 ,0,WINDOW_WIDTH , WINDOW_HEIGHT);
+        window.add(mainScene);
+
+        window.setVisible(true);
     }
+
 }
