@@ -15,6 +15,8 @@ public class MainScene extends JPanel {
     public MainScene(int x, int y, int width, int height){
         this.setBounds(x, y, width, height);
         this.setBackground(Color.BLUE);
+        this.width = width;
+        this.height = height;
 
         this.player = new Player(width/2 - 50,height/2 - 50, width, height);
 
@@ -41,10 +43,19 @@ public class MainScene extends JPanel {
         }).start();
     }
 
+
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         this.player.paint(g);
+
+        for (int i = 0; i < bullets.length; i++) {
+            if (bullets[i] != null) {
+                bullets[i].paint(g);
+            }
+        }
     }
+
 
     public void setUpPressed(boolean upPressed) {
         this.upPressed = upPressed;
@@ -61,6 +72,7 @@ public class MainScene extends JPanel {
     public void setRightPressed(boolean rightPressed) {
         this.rightPressed = rightPressed;
     }
+
 
     public void update(){
         if (upPressed) player.moveUp();

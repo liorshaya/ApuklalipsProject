@@ -27,10 +27,14 @@ public class Player{
     }
 
     public void moveUp(){
-        this.y--;
+        if (this.y != 0) {
+            this.y--;
+        }
     }
     public void moveDown(){
-        this.y++;
+        if (this.y + PLAYER_HEIGHT != height) {
+            this.y++;
+        }
     }
 
 
