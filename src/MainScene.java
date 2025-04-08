@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 
 public class MainScene extends JPanel {
     private Player player;
@@ -12,6 +13,11 @@ public class MainScene extends JPanel {
     private boolean leftPressed = false;
     private boolean rightPressed = false;
 
+    private Bullet[] bullets = new Bullet[100];
+
+
+
+
     public MainScene(int x, int y, int width, int height){
         this.setBounds(x, y, width, height);
         this.setBackground(Color.BLUE);
@@ -22,6 +28,10 @@ public class MainScene extends JPanel {
 
         this.setFocusable(true);
         this.requestFocus();
+
+
+        MouseListenerEvents mouseListener = new MouseListenerEvents(this.player, this.bullets);
+        this.addMouseListener(mouseListener);
 
         this.addKeyListener(new MovmentListener(this,this.player));
         this.mainGameLoop();
@@ -79,5 +89,14 @@ public class MainScene extends JPanel {
         if (downPressed) player.moveDown();
         if (leftPressed) player.moveLeft();
         if (rightPressed) player.moveRight();
+
+        for (int i = 0; i < this.bullets.length; i++) {
+            if (this.bullets[i] != null){
+                this.bullets[i].update();
+                if (this.bullets[i].isBulletOutOfScreen(width, height)){
+                    this.bullets[i] = null;
+                }
+            }
+        }
     }
 }

@@ -17,13 +17,16 @@ public class Player{
     }
 
 
-
     public void moveRight(){
-        this.x++;
+        if (this.x + PLAYER_WIDTH != width){
+            this.x++;
+        }
     }
 
     public void moveLeft(){
-        this.x--;
+        if (this.x != 0){
+            this.x--;
+        }
     }
 
     public void moveUp(){
@@ -52,6 +55,14 @@ public class Player{
 
     public void setX(int x) {
         this.x = x;
+    }
+
+    public int getPlayerCenterX() {
+        return x + PLAYER_WIDTH / 2;
+    }
+
+    public int getPlayerCenterY() {
+        return y + PLAYER_HEIGHT / 2;
     }
 
     public void paint(Graphics g){
