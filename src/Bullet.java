@@ -8,7 +8,7 @@ public class Bullet {
     private double y;
     private double dx;
     private double dy;
-    private final double SPEED = 7;
+    private final double SPEED = 20;
 //    private final int size = 8;
 
     public Bullet(int x, int y, int targetX, int targetY){
