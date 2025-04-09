@@ -43,6 +43,18 @@ public class Player extends Character{
         return getY() + PLAYER_HEIGHT / 2;
     }
 
+    public int getPlayerWidth(){
+        return PLAYER_WIDTH;
+    }
+
+    public int getPlayerHeight(){
+        return PLAYER_HEIGHT;
+    }
+
+    public void playerKill(){
+        this.kills++;
+    }
+
     public void paint(Graphics g){
         g.setColor(Color.GREEN);
         g.fillRect(this.getX(), this.getY(), PLAYER_WIDTH ,PLAYER_HEIGHT);

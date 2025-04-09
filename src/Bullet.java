@@ -9,11 +9,13 @@ public class Bullet {
     private double dx;
     private double dy;
     private final double SPEED = 20;
-//    private final int size = 8;
+    private boolean isHit;
+
 
     public Bullet(int x, int y, int targetX, int targetY){
         this.x = x;
         this.y = y;
+        this.isHit = false;
 
         double angle = Math.atan2(targetY - y, targetX - x);
         this.dx = Math.cos(angle) * SPEED;
@@ -21,8 +23,17 @@ public class Bullet {
     }
 
     public void update(){
-        x += dx;
-        y += dy;
+        this.x += dx;
+        this.y += dy;
+    }
+
+    public boolean checkCollision(Rectangle zombieRect){
+        Rectangle bulletRect = new Rectangle((int) this.x, (int)this.y, BULLET_WIDTH, BULLET_HEIGHT);
+        if (bulletRect.intersects(zombieRect)){
+            this.isHit = true;
+            return true;
+        }
+        return false;
     }
 
     public void paint(Graphics g){
