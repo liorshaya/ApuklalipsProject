@@ -34,4 +34,24 @@ public class Bullet {
         return x < 0 || x > width || y < 0 || y > height;
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public int getbulletHight(){
+        return BULLET_HEIGHT;
+    }
+
+
+    public int getBulletWidth(){
+        return BULLET_WIDTH;
+    }
+
+    public boolean getIsHit() {
+        return isHit;
+    }
 }

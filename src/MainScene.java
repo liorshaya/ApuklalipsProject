@@ -58,6 +58,11 @@ public class MainScene extends JPanel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         this.player.paint(g);
+        for (int i = 0; i < this.zombies.length; i++) {
+            if (this.zombies[i] != null){
+                zombies[i].paint(g);
+            }
+        }
 
         for (int i = 0; i < bullets.length; i++) {
             if (bullets[i] != null) {
