@@ -20,7 +20,7 @@ public class Zombie{
         this.y = y;
         this.width = width;
         this.height = height;
-        this.hitCounter = 3;
+        this.hitCounter = 15;
     }
 
 
