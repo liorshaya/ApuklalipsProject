@@ -32,6 +32,9 @@ public class MainScene extends JPanel {
         this.setFocusable(true);
         this.requestFocus();
 
+        Timer timer = new Timer(100, 100, 100,100);
+        this.add(timer);
+
         MouseListenerEvents mouseListener = new MouseListenerEvents(this.player, this.bullets);
         this.addMouseListener(mouseListener);
 
