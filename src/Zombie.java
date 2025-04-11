@@ -80,7 +80,7 @@ public class Zombie{
                 g2d.drawImage(deathZombieFrames[deathFrame], (int) x, (int) y, ZOMBIE_WIDTH*2, ZOMBIE_HEIGHT*2, null);
             }
 
-            if (deathFrame == deathZombieFrames.length - 1 && currentTime - timeOfDeath > deathDelay) {                // סימן לזומבי שהוא "למחיקה"
+            if (deathFrame == deathZombieFrames.length - 1 && currentTime - timeOfDeath > deathDelay) {
                 this.toBeRemoved = true;
                 this.deathZombieFrames = null;
             }
