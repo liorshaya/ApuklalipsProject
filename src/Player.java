@@ -1,14 +1,28 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Player extends Character{
-    public static final int PLAYER_WIDTH = 100;
-    public static final int PLAYER_HEIGHT = 100;
+    public static final int PLAYER_WIDTH = 64;
+    public static final int PLAYER_HEIGHT = 64;
 
     private int kills;
+
+    private BufferedImage[] walkPlayerFrames;
+    private int currentFrame = 0;
+    private long lastFrameTime = 0;
+    private final int frameDelay = 100;
+    private double angle = 0;
+    private Point mouseLocation = new Point(0, 0);
+
 
     public Player(int x, int y, int width, int height){
         super(x, y, width, height);
         this.kills = 0;
+        this.walkPlayerFrames = ImageManager.loadPlayerImage();
+
     }
 
 
@@ -32,6 +46,7 @@ public class Player extends Character{
     public void moveDown(){
         if (this.getY() + PLAYER_HEIGHT != this.getHeight()) {
             this.setY(this.getY()+1);
+
         }
     }
 
@@ -55,9 +70,45 @@ public class Player extends Character{
         this.kills++;
     }
 
+    public void setMouseLocation(Point p) {
+        this.mouseLocation = p;
+    }
+
     public void paint(Graphics g){
-        g.setColor(Color.GREEN);
-        g.fillRect(this.getX(), this.getY(), PLAYER_WIDTH ,PLAYER_HEIGHT);
+        //g.setColor(Color.GREEN);
+        //g.fillRect(this.getX(), this.getY(), PLAYER_WIDTH ,PLAYER_HEIGHT);
+        Graphics2D g2d = (Graphics2D) g;
+
+        int playerCenterX = getX() + PLAYER_WIDTH / 2;
+        int playerCenterY = getY() + PLAYER_HEIGHT / 2;
+
+        double dx = mouseLocation.x - playerCenterX;
+        double dy = mouseLocation.y - playerCenterY;
+
+        angle = Math.atan2(dy, dx) + -Math.PI / 2;
+
+        g.setColor(Color.RED);
+        g.fillOval(mouseLocation.x - 3, mouseLocation.y - 3, 6, 6);
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastFrameTime > frameDelay) {
+            currentFrame = (currentFrame + 1) % walkPlayerFrames.length;
+            lastFrameTime = currentTime;
+        }
+
+        BufferedImage frame = walkPlayerFrames[currentFrame];
+        if (frame != null) {
+            int cx = getX() + PLAYER_WIDTH / 2;
+            int cy = getY() + PLAYER_HEIGHT / 2;
+
+            g2d.rotate(angle, cx, cy);
+            g2d.drawImage(frame, getX(), getY(), PLAYER_WIDTH, PLAYER_HEIGHT, null);
+            g2d.rotate(-angle, cx, cy);
+        } else {
+            g.setColor(Color.BLUE);
+            g.fillRect(getX(), getY(), PLAYER_WIDTH, PLAYER_HEIGHT);
+        }
+
     }
 
 

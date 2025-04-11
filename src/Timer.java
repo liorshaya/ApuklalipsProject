@@ -9,7 +9,9 @@ public class Timer extends JLabel {
         this.seconds = 0;
         this.minutes = 0;
 
-        this.setBackground(Color.black);
+        //this.setBackground(Color.white);
+        this.setForeground(Color.WHITE);
+       // this.setOpaque(true);
         this.setBounds(x, y, width, height);
         this.setFont(new Font("Arial", Font.BOLD, 40));
 

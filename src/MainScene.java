@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class MainScene extends JPanel {
@@ -21,7 +22,8 @@ public class MainScene extends JPanel {
 
     public MainScene(int x, int y, int width, int height){
         this.setBounds(x, y, width, height);
-        this.setBackground(Color.BLUE);
+        ImageManager.loadBackground();
+        //this.setBackground(Color.BLUE);
         this.width = width;
         this.height = height;
 
@@ -37,6 +39,7 @@ public class MainScene extends JPanel {
 
         MouseListenerEvents mouseListener = new MouseListenerEvents(this.player, this.bullets);
         this.addMouseListener(mouseListener);
+        this.addMouseMotionListener(mouseListener);
 
         this.addKeyListener(new MovmentListener(this,this.player));
         this.mainGameLoop();
@@ -62,11 +65,21 @@ public class MainScene extends JPanel {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+
+        BufferedImage background = ImageManager.getBackground();
+        if (background != null) {
+            g.drawImage(background, 0, 0, null);
+        }
+
         this.player.paint(g);
         for (int i = 0; i < this.zombies.length; i++) {
-            if (this.zombies[i] != null){
+            if (this.zombies[i] != null && !zombies[i].isToBeRemoved()){
                 zombies[i].paint(g);
             }
+            else{
+                zombies[i] = null;
+            }
+
         }
 
         for (int i = 0; i < bullets.length; i++) {
@@ -175,7 +188,6 @@ public class MainScene extends JPanel {
                 }
 
                 if (zombies[i].getHitCounter() == 0){
-                    zombies[i] = null;
                     this.player.playerKill();
                 }
             }

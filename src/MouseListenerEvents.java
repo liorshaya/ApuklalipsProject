@@ -1,7 +1,8 @@
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
-public class MouseListenerEvents extends MouseAdapter {
+public class MouseListenerEvents extends MouseAdapter implements MouseMotionListener {
     private Player player;
     private Bullet[] bullets;
 
@@ -10,7 +11,6 @@ public class MouseListenerEvents extends MouseAdapter {
         this.bullets = bullets;
     }
 
-    @Override
     public void mousePressed(MouseEvent e) {
         int mouseX = e.getX();
         int mouseY = e.getY();
@@ -21,5 +21,9 @@ public class MouseListenerEvents extends MouseAdapter {
                 break;
             }
         }
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        player.setMouseLocation(e.getPoint());
     }
 }

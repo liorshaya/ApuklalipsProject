@@ -1,15 +1,27 @@
 import java.awt.*;
-import java.util.Random;
+import java.awt.image.BufferedImage;
 
 public class Zombie{
-    public static final int ZOMBIE_WIDTH = 50;
-    public static final int ZOMBIE_HEIGHT = 50;
+    public static final int ZOMBIE_WIDTH = 64;
+    public static final int ZOMBIE_HEIGHT = 64;
 
     private double x;
     private double y;
     private int width;
     private int height;
     private int hitCounter;
+
+    private BufferedImage[] walkZombieFrames;
+    private int currentFrame = 0;
+    private long lastFrameTime = 0;
+    private final int frameDelay = 100;
+    private double angle = 0;
+
+    private BufferedImage[] deathZombieFrames;
+    private int deathFrame = 0;
+    private long timeOfDeath = 0;
+    private final long deathDelay = 2000;
+    private boolean toBeRemoved = false;
 
     private double dx;
     private double dy;
@@ -21,17 +33,21 @@ public class Zombie{
         this.width = width;
         this.height = height;
         this.hitCounter = 15;
+        this.walkZombieFrames = ImageManager.loadZombieImage();
+
     }
 
 
 
     public void move(int playerX , int playerY){
-        double angle = Math.atan2(playerY + ZOMBIE_HEIGHT/2 - this.y, playerX + ZOMBIE_WIDTH/2 - this.x);
+        this.angle = Math.atan2(playerY + ZOMBIE_HEIGHT/2 - this.y, playerX + ZOMBIE_WIDTH/2 - this.x);
         this.dx = Math.cos(angle) * SPEED;
         this.dy = Math.sin(angle) * SPEED;
 
-        this.x += dx;
-        this.y += dy;
+        if(deathZombieFrames == null){
+            this.x += dx;
+            this.y += dy;
+        }
     }
 
 
@@ -45,8 +61,49 @@ public class Zombie{
 
 
     public void paint(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect((int) this.x, (int) this.y, ZOMBIE_WIDTH ,ZOMBIE_HEIGHT);
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        int cx = (int) x + ZOMBIE_WIDTH / 2;
+        int cy = (int) y + ZOMBIE_HEIGHT / 2;
+
+
+        if (deathZombieFrames != null && deathFrame < deathZombieFrames.length) {
+            long currentTime = System.currentTimeMillis();
+
+            if (currentTime - lastFrameTime > frameDelay && deathFrame < deathZombieFrames.length - 1) {
+                deathFrame++;
+                lastFrameTime = currentTime;
+            }
+
+            if (deathZombieFrames[deathFrame] != null) {
+                g2d.drawImage(deathZombieFrames[deathFrame], (int) x, (int) y, ZOMBIE_WIDTH*2, ZOMBIE_HEIGHT*2, null);
+            }
+
+            if (deathFrame == deathZombieFrames.length - 1 && currentTime - timeOfDeath > deathDelay) {                // סימן לזומבי שהוא "למחיקה"
+                this.toBeRemoved = true;
+                this.deathZombieFrames = null;
+            }
+            return;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastFrameTime > frameDelay) {
+            currentFrame = (currentFrame + 1) % walkZombieFrames.length;
+            lastFrameTime = currentTime;
+        }
+
+        if (walkZombieFrames[currentFrame] != null) {
+            g2d.rotate(angle - Math.PI / 2, cx, cy);
+            g2d.drawImage(walkZombieFrames[currentFrame], (int) x, (int) y, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, null);
+            g2d.rotate(-angle + Math.PI / 2, cx, cy);
+        } else {
+            g.setColor(Color.WHITE);
+            g.fillRect((int) x, (int) y, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+        }
+
+
+
     }
 
     public double getX() {
@@ -68,8 +125,18 @@ public class Zombie{
     public int getHitCounter() {
         return hitCounter;
     }
+    public boolean isToBeRemoved() {
+        return toBeRemoved;
+    }
 
     public void bulletHit(){
         this.hitCounter--;
+        if(hitCounter == 0){
+            this.deathZombieFrames = ImageManager.loadZombieDeathImage();
+            this.deathFrame = 0;
+            this.currentFrame = 0;
+            this.lastFrameTime = System.currentTimeMillis();
+            this.timeOfDeath = System.currentTimeMillis();
+        }
     }
 }
