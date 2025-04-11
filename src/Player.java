@@ -1,8 +1,6 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 
 public class Player extends Character{
     public static final int PLAYER_WIDTH = 64;
@@ -24,6 +22,8 @@ public class Player extends Character{
         this.walkPlayerFrames = ImageManager.loadPlayerImage();
 
     }
+
+
 
 
     public void moveRight(){
@@ -75,8 +75,7 @@ public class Player extends Character{
     }
 
     public void paint(Graphics g){
-        //g.setColor(Color.GREEN);
-        //g.fillRect(this.getX(), this.getY(), PLAYER_WIDTH ,PLAYER_HEIGHT);
+
         Graphics2D g2d = (Graphics2D) g;
 
         int playerCenterX = getX() + PLAYER_WIDTH / 2;
