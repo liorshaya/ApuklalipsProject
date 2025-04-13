@@ -7,7 +7,7 @@ public class MouseListenerEvents extends MouseAdapter implements MouseMotionList
     private Bullet[] bullets;
     private HudPanel hudPanel;
 
-    public MouseListenerEvents(Player player, Bullet[] bullets){
+    public MouseListenerEvents(Player player, Bullet[] bullets, HudPanel hudPanel){
         this.player = player;
         this.bullets = bullets;
         this.hudPanel = hudPanel;
@@ -19,7 +19,11 @@ public class MouseListenerEvents extends MouseAdapter implements MouseMotionList
 
         for (int i = 0; i < bullets.length; i++) {
             if (bullets[i] == null){
-                bullets[i] = new Bullet(player.getPlayerCenterX(), player.getPlayerCenterY(), mouseX, mouseY);
+                if (!player.getIsReloading()){
+                    bullets[i] = new Bullet(player.getPlayerCenterX(), player.getPlayerCenterY(), mouseX, mouseY);
+                    player.shoot();
+                    hudPanel.shoot();
+                }
                 break;
             }
         }

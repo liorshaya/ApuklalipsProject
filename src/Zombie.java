@@ -4,12 +4,16 @@ import java.awt.image.BufferedImage;
 public class Zombie{
     public static final int ZOMBIE_WIDTH = 64;
     public static final int ZOMBIE_HEIGHT = 64;
+    public static final int HEALTH_BAR_WIDTH = 50;
 
     private double x;
     private double y;
     private int width;
     private int height;
     private int hitCounter;
+    private int hitDamage;
+    private int healthBarWidth;
+    private int totalHealth;
 
     private BufferedImage[] walkZombieFrames;
     private int currentFrame = 0;
@@ -32,9 +36,12 @@ public class Zombie{
         this.y = y;
         this.width = width;
         this.height = height;
-        this.hitCounter = 15;
-        this.walkZombieFrames = ImageManager.loadZombieImage();
+        this.hitCounter = 10;
+        this.totalHealth = 10;
+        this.hitDamage = 10;
+        this.healthBarWidth = 50;
 
+        this.walkZombieFrames = ImageManager.loadZombieImage();
     }
 
 
@@ -59,10 +66,22 @@ public class Zombie{
         return false;
     }
 
+    public int getHitDamage(){
+        return this.hitDamage;
+    }
+
+    public void zombieHurt(){
+        this.healthBarWidth -= (HEALTH_BAR_WIDTH/this.totalHealth);
+    }
+
 
     public void paint(Graphics g) {
 
         Graphics2D g2d = (Graphics2D) g;
+
+        g.setColor(Color.RED);
+        g.fillRect((int) this.x, (int) this.y, this.healthBarWidth, 5);
+
 
         int cx = (int) x + ZOMBIE_WIDTH / 2;
         int cy = (int) y + ZOMBIE_HEIGHT / 2;
@@ -125,6 +144,7 @@ public class Zombie{
     public int getHitCounter() {
         return hitCounter;
     }
+
     public boolean isToBeRemoved() {
         return toBeRemoved;
     }

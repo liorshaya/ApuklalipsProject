@@ -22,6 +22,7 @@ public class MainScene extends JPanel {
 
     public MainScene(int x, int y, int width, int height){
         this.setBounds(x, y, width, height);
+        this.setLayout(null);
         ImageManager.loadBackground();
 
         this.width = width;
@@ -34,14 +35,20 @@ public class MainScene extends JPanel {
         this.setFocusable(true);
         this.requestFocus();
 
-        Timer timer = new Timer(100, 100, 100,100);
+        Timer timer = new Timer(this.width/2 - 60, 0, 300,100);
         this.add(timer);
 
-        MouseListenerEvents mouseListener = new MouseListenerEvents(this.player, this.bullets);
+        this.hudPanel = new HudPanel(this.player, 0, this.height - 80, 330, 80);
+        this.add(hudPanel);
+
+        this.player.setHudPanel(this.hudPanel);
+
+        MouseListenerEvents mouseListener = new MouseListenerEvents(this.player, this.bullets, this.hudPanel);
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
 
         this.addKeyListener(new MovmentListener(this,this.player));
+
         this.mainGameLoop();
 
     }
@@ -184,8 +191,12 @@ public class MainScene extends JPanel {
         for (int i = 0; i < this.zombies.length; i++) {
             if (this.zombies[i] != null){
                 this.zombies[i].move(this.player.getX(), this.player.getY());
-                if (this.zombies[i].checkCollision(new Rectangle(this.player.getX(), this.player.getY() ,this.player.getPlayerWidth(), this.player.getPlayerHeight()))){
-                    System.out.println("HIT!");
+                if (!this.player.getIsHitted()){
+                    if (this.zombies[i].checkCollision(new Rectangle(this.player.getX(), this.player.getY() ,this.player.getPlayerWidth(), this.player.getPlayerHeight()))){
+                        System.out.println("HIT!");
+                        this.player.hurt(this.zombies[i].getHitDamage());
+                        this.hudPanel.hurt(this.zombies[i].getHitDamage());
+                    }
                 }
 
                 if (zombies[i].getHitCounter() == 0){

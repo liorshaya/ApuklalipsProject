@@ -7,6 +7,11 @@ public class Player extends Character{
     public static final int PLAYER_HEIGHT = 64;
 
     private int kills;
+    private int bulletsLeft;
+    private boolean isReloading;
+    private int health;
+    private boolean isHitted;
+    private HudPanel hudPanel;
 
     private BufferedImage[] walkPlayerFrames;
     private int currentFrame = 0;
@@ -19,12 +24,16 @@ public class Player extends Character{
     public Player(int x, int y, int width, int height, HudPanel hudPanel){
         super(x, y, width, height);
         this.kills = 0;
+        this.bulletsLeft = 30;
+        this.isReloading = false;
+        this.health = 100;
+        this.isHitted = false;
         this.walkPlayerFrames = ImageManager.loadPlayerImage();
-
     }
 
-
-
+    public void setHudPanel(HudPanel hudPanel) {
+        this.hudPanel = hudPanel;
+    }
 
     public void moveRight(){
         if (this.getX() + PLAYER_WIDTH != this.getWidth()){
@@ -68,6 +77,57 @@ public class Player extends Character{
 
     public void playerKill(){
         this.kills++;
+    }
+
+    public void shoot(){
+        this.bulletsLeft--;
+
+        if (this.bulletsLeft == 0){
+            isReloading = true;
+            reload();
+        }
+    }
+
+    public boolean getIsReloading(){
+        return this.isReloading;
+    }
+
+    public void reload(){
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            this.bulletsLeft = 30;
+            this.isReloading = false;
+            this.hudPanel.shoot();
+        }).start();
+    }
+
+    public void hurt(int damage){
+        this.health =- damage;
+        this.isHitted = true;
+        hitDelay();
+    }
+
+    private void hitDelay(){
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            this.isHitted = false;
+        }).start();
+    }
+
+    public int getBulletsLeft() {
+        return bulletsLeft;
+    }
+
+    public boolean getIsHitted() {
+        return isHitted;
     }
 
     public void setMouseLocation(Point p) {
