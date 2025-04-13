@@ -16,7 +16,7 @@ public class Player extends Character{
     private Point mouseLocation = new Point(0, 0);
 
 
-    public Player(int x, int y, int width, int height){
+    public Player(int x, int y, int width, int height, HudPanel hudPanel){
         super(x, y, width, height);
         this.kills = 0;
         this.walkPlayerFrames = ImageManager.loadPlayerImage();

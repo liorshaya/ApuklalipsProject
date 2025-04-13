@@ -17,6 +17,7 @@ public class Main {
         MainScene mainScene = new MainScene(0 ,0,WINDOW_WIDTH , WINDOW_HEIGHT);
         window.add(mainScene);
 
+
         window.setVisible(true);
     }
 

@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.PropertyResourceBundle;
 import java.util.Random;
 
 public class MainScene extends JPanel {
     private Player player;
+    private HudPanel hudPanel;
     private int width;
     private int height;
 
@@ -23,11 +23,11 @@ public class MainScene extends JPanel {
     public MainScene(int x, int y, int width, int height){
         this.setBounds(x, y, width, height);
         ImageManager.loadBackground();
-        //this.setBackground(Color.BLUE);
+
         this.width = width;
         this.height = height;
 
-        this.player = new Player(width/2 - 50,height/2 - 50, width, height);
+        this.player = new Player(width/2 - 50,height/2 - 50, width, height , hudPanel);
 
         this.zombieSpawner();
 
@@ -167,7 +167,8 @@ public class MainScene extends JPanel {
                     if (zombies[j] != null){
                         if (this.bullets[i].checkCollision(new Rectangle((int) zombies[j].getX(), (int) zombies[j].getY(), zombies[j].getZombieWidth(), zombies[j].getZombieHeight()))){
                             zombies[j].bulletHit();
-                            System.out.println("shoot!");
+                            System.out.println("botHit!");
+                            this.zombies[j].zombieHurt();
                         }
                     }
                 }

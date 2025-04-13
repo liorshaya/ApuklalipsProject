@@ -77,7 +77,7 @@ public class Zombie{
             }
 
             if (deathZombieFrames[deathFrame] != null) {
-                g2d.drawImage(deathZombieFrames[deathFrame], (int) x, (int) y, ZOMBIE_WIDTH*2, ZOMBIE_HEIGHT*2, null);
+                g2d.drawImage(deathZombieFrames[deathFrame], (int) x, (int) y, ZOMBIE_WIDTH+32, ZOMBIE_HEIGHT+32, null);
             }
 
             if (deathFrame == deathZombieFrames.length - 1 && currentTime - timeOfDeath > deathDelay) {
