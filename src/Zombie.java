@@ -1,27 +1,30 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Zombie{
-    public static final int ZOMBIE_WIDTH = 64;
-    public static final int ZOMBIE_HEIGHT = 64;
-    public static final int HEALTH_BAR_WIDTH = 50;
-
+public abstract class Zombie{
     private double x;
     private double y;
     private int width;
     private int height;
+
     private int hitCounter;
     private int hitDamage;
-    private int healthBarWidth;
     private int totalHealth;
+    private int healthBarWidth;
+
+    private int zombieWidth;
+    private int zombieHeight;
+    private int staticHealthBarWidth;
 
     private BufferedImage[] walkZombieFrames;
     private int currentFrame = 0;
     private long lastFrameTime = 0;
+
     private final int frameDelay = 100;
     private double angle = 0;
 
     private BufferedImage[] deathZombieFrames;
+    private BufferedImage[] tempDeathZombieFrames;
     private int deathFrame = 0;
     private long timeOfDeath = 0;
     private final long deathDelay = 2000;
@@ -29,27 +32,39 @@ public class Zombie{
 
     private double dx;
     private double dy;
-    private final double SPEED = 0.5;
+    private double speed;
 
-    public Zombie(int x, int y , int width , int height){
+    public Zombie(int x, int y , int width , int height,
+                      int hitCounter, int totalHealth, int hitDamage,
+                      int healthBarWidth, double speed,
+                      int zombieWidth, int zombieHeight, int staticHealthBarWidth,
+                      BufferedImage[] walkFrames, BufferedImage[] deathFrames){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.hitCounter = 10;
-        this.totalHealth = 10;
-        this.hitDamage = 10;
-        this.healthBarWidth = 50;
 
-        this.walkZombieFrames = ImageManager.loadZombieImage();
+        this.hitCounter = hitCounter;
+        this.totalHealth = totalHealth;
+        this.hitDamage = hitDamage;
+        this.healthBarWidth = healthBarWidth;
+        this.speed = speed;
+
+        this.zombieWidth = zombieWidth;
+        this.zombieHeight = zombieHeight;
+        this.staticHealthBarWidth = staticHealthBarWidth;
+
+
+        this.walkZombieFrames = walkFrames;
+        this.tempDeathZombieFrames = deathFrames;
     }
 
 
 
     public void move(int playerX , int playerY){
-        this.angle = Math.atan2(playerY + ZOMBIE_HEIGHT/2 - this.y, playerX + ZOMBIE_WIDTH/2 - this.x);
-        this.dx = Math.cos(angle) * SPEED;
-        this.dy = Math.sin(angle) * SPEED;
+        this.angle = Math.atan2(playerY + zombieHeight /2 - this.y, playerX + zombieWidth /2 - this.x);
+        this.dx = Math.cos(angle) * speed;
+        this.dy = Math.sin(angle) * speed;
 
         if(deathZombieFrames == null){
             this.x += dx;
@@ -59,7 +74,7 @@ public class Zombie{
 
 
     public boolean checkCollision(Rectangle playerRect){
-        Rectangle zombieRect = new Rectangle((int) this.x, (int)this.y, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+        Rectangle zombieRect = new Rectangle((int) this.x, (int)this.y, zombieWidth, zombieHeight);
         if (zombieRect.intersects(playerRect)){
             return true;
         }
@@ -71,7 +86,11 @@ public class Zombie{
     }
 
     public void zombieHurt(){
-        this.healthBarWidth -= (HEALTH_BAR_WIDTH/this.totalHealth);
+        this.healthBarWidth -= (staticHealthBarWidth /this.totalHealth);
+    }
+
+    public boolean isDead(){
+        return this.hitCounter == 0;
     }
 
 
@@ -83,8 +102,8 @@ public class Zombie{
         g.fillRect((int) this.x, (int) this.y, this.healthBarWidth, 5);
 
 
-        int cx = (int) x + ZOMBIE_WIDTH / 2;
-        int cy = (int) y + ZOMBIE_HEIGHT / 2;
+        int cx = (int) x + zombieWidth / 2;
+        int cy = (int) y + zombieHeight / 2;
 
 
         if (deathZombieFrames != null && deathFrame < deathZombieFrames.length) {
@@ -96,7 +115,7 @@ public class Zombie{
             }
 
             if (deathZombieFrames[deathFrame] != null) {
-                g2d.drawImage(deathZombieFrames[deathFrame], (int) x, (int) y, ZOMBIE_WIDTH+32, ZOMBIE_HEIGHT+32, null);
+                g2d.drawImage(deathZombieFrames[deathFrame], (int) x, (int) y, zombieWidth +32, zombieHeight +32, null);
             }
 
             if (deathFrame == deathZombieFrames.length - 1 && currentTime - timeOfDeath > deathDelay) {
@@ -114,11 +133,11 @@ public class Zombie{
 
         if (walkZombieFrames[currentFrame] != null) {
             g2d.rotate(angle - Math.PI / 2, cx, cy);
-            g2d.drawImage(walkZombieFrames[currentFrame], (int) x, (int) y, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, null);
+            g2d.drawImage(walkZombieFrames[currentFrame], (int) x, (int) y, zombieWidth, zombieHeight, null);
             g2d.rotate(-angle + Math.PI / 2, cx, cy);
         } else {
             g.setColor(Color.WHITE);
-            g.fillRect((int) x, (int) y, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+            g.fillRect((int) x, (int) y, zombieWidth, zombieHeight);
         }
 
 
@@ -134,11 +153,11 @@ public class Zombie{
     }
 
     public int getZombieWidth() {
-        return ZOMBIE_WIDTH;
+        return zombieWidth;
     }
 
     public int getZombieHeight() {
-        return ZOMBIE_HEIGHT;
+        return zombieHeight;
     }
 
     public int getHitCounter() {
@@ -152,7 +171,7 @@ public class Zombie{
     public void bulletHit(){
         this.hitCounter--;
         if(hitCounter == 0){
-            this.deathZombieFrames = ImageManager.loadZombieDeathImage();
+            this.deathZombieFrames = this.tempDeathZombieFrames;
             this.deathFrame = 0;
             this.currentFrame = 0;
             this.lastFrameTime = System.currentTimeMillis();

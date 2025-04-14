@@ -34,7 +34,7 @@ public class ImageManager {
         BufferedImage[] walkZombieFrames = new BufferedImage[9];
         for (int i = 0; i < 9; i++) {
             try {
-                walkZombieFrames[i] = ImageIO.read(new File("resources/Zombie/Walk/Walk_00" + i + ".png"));
+                walkZombieFrames[i] = ImageIO.read(new File("resources/Zombies/Tier1Regular/Walk/Walk_00" + i + ".png"));
             } catch (IOException e) {
                 System.out.println("Error with zombie walk image.");
             }
@@ -46,7 +46,7 @@ public class ImageManager {
         BufferedImage[] walkZombieDeathFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
             try {
-                walkZombieDeathFrames[i] = ImageIO.read(new File("resources/Zombie/Death/Death_00" + i + ".png"));
+                walkZombieDeathFrames[i] = ImageIO.read(new File("resources/Zombies/Tier1Regular/Death/Death_00" + i + ".png"));
             } catch (IOException e) {
                 System.out.println("Error with zombie death image.");
             }

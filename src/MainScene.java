@@ -119,7 +119,7 @@ public class MainScene extends JPanel {
                 for (int i = 0; i < this.zombies.length; i++) {
                     if (this.zombies[i] == null){
                         int[] randomLocations = randomSpawn();
-                        Zombie zombie = new Zombie(randomLocations[0], randomLocations[1], this.width, this.width);
+                        ZombieLvl1 zombie = new ZombieLvl1(randomLocations[0], randomLocations[1], this.width, this.width);
                         this.zombies[i] = zombie;
                         break;
                     }
@@ -170,7 +170,7 @@ public class MainScene extends JPanel {
             if (this.bullets[i] != null){
 
                 for (int j = 0; j < this.zombies.length; j++) {
-                    if (zombies[j] != null){
+                    if (zombies[j] != null && !zombies[j].isDead()){
                         if (this.bullets[i].checkCollision(new Rectangle((int) zombies[j].getX(), (int) zombies[j].getY(), zombies[j].getZombieWidth(), zombies[j].getZombieHeight()))){
                             zombies[j].bulletHit();
                             System.out.println("botHit!");
