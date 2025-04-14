@@ -131,6 +131,29 @@ public class MainScene extends JPanel {
                 }
             }
         }).start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(23000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            while (true){
+                for (int i = 0; i < this.zombies.length; i++) {
+                    if (this.zombies[i] == null){
+                        int[] randomLocations = randomSpawn();
+                        ZombieLvl1Boss zombieBoss = new ZombieLvl1Boss(randomLocations[0], randomLocations[1], this.width, this.width);
+                        this.zombies[i] = zombieBoss;
+                        break;
+                    }
+                }
+                try {
+                    Thread.sleep(rnd.nextInt(15000,25000));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
     }
 
     public int[] randomSpawn(){

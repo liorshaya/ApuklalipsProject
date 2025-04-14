@@ -53,4 +53,28 @@ public class ImageManager {
         }
         return walkZombieDeathFrames;
     }
+
+    public static BufferedImage[] loadZombieBossLvl1Image(){
+        BufferedImage[] walkZombieBossLvl1Frames = new BufferedImage[9];
+        for (int i = 0; i < 9; i++) {
+            try {
+                walkZombieBossLvl1Frames[i] = ImageIO.read(new File("resources/Zombies/Tier1Boss/Walk/walk_00" + i + ".png"));
+            } catch (IOException e) {
+                System.out.println("Error with zombie boss lvl 1 walk image.");
+            }
+        }
+        return walkZombieBossLvl1Frames;
+    }
+
+    public static BufferedImage[] loadZombieDeathBossLvl1Image(){
+        BufferedImage[] deathZombieBossLvl1Frames = new BufferedImage[6];
+        for (int i = 0; i < 6; i++) {
+            try {
+                deathZombieBossLvl1Frames[i] = ImageIO.read(new File("resources/Zombies/Tier1Boss/Death/death_00" + i + ".png"));
+            } catch (IOException e) {
+                System.out.println("Error with zombie boss lvl 1 death image.");
+            }
+        }
+        return deathZombieBossLvl1Frames;
+    }
 }
