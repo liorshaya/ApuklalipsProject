@@ -114,6 +114,7 @@ public class MainScene extends JPanel {
 
 
     public void zombieSpawner(){
+        Random rnd = new Random();
         new Thread(() -> {
             while (true){
                 for (int i = 0; i < this.zombies.length; i++) {
