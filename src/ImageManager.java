@@ -5,6 +5,8 @@ import java.io.IOException;
 
 public class ImageManager {
     private static BufferedImage background;
+    private static BufferedImage menuBackground;
+    private static BufferedImage startButton;
 
     public static void loadBackground(){
         try {
@@ -16,6 +18,29 @@ public class ImageManager {
 
     public static BufferedImage getBackground(){
         return background;
+    }
+
+    public static void loadMenuBackground(){
+        try {
+            menuBackground = ImageIO.read(new File("resources/MainMenu/background.png"));
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+    }
+
+    public static BufferedImage getMenuBackground(){
+        return menuBackground;
+    }
+
+    public static void loadStartButton(){
+        try {
+            startButton = ImageIO.read(new File("resources/MainMenu/startButton.png"));
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+    }
+    public static BufferedImage getStartButton(){
+        return startButton;
     }
 
     public static BufferedImage[] loadPlayerImage(){

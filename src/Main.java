@@ -14,6 +14,10 @@ public class Main {
         window.setResizable(false);
         window.setLayout(null);
 
+
+        MainMenu mainMenu = new MainMenu(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+        window.add(mainMenu);
+
         MainScene mainScene = new MainScene(0 ,0,WINDOW_WIDTH , WINDOW_HEIGHT);
         window.add(mainScene);
 
