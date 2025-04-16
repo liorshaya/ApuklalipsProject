@@ -13,12 +13,19 @@ public class Player extends Character{
     private boolean isHitted;
     private HudPanel hudPanel;
 
-    private BufferedImage[] walkPlayerFrames;
+
+    private BufferedImage[] deathPlayerFrames;
     private int currentFrame = 0;
     private long lastFrameTime = 0;
     private final int frameDelay = 100;
     private double angle = 0;
     private Point mouseLocation = new Point(0, 0);
+
+
+    private BufferedImage[] walkPlayerFrames;
+    private int deathFrame = 0;
+    private long timeOfDeath = 0;
+    private final long deathDelay = 2000;
 
 
     public Player(int x, int y, int width, int height, HudPanel hudPanel){
@@ -106,7 +113,7 @@ public class Player extends Character{
     }
 
     public void hurt(int damage){
-        this.health =- damage;
+        this.health -= damage;
         this.isHitted = true;
         hitDelay();
     }
@@ -130,8 +137,19 @@ public class Player extends Character{
         return isHitted;
     }
 
+    public boolean isDead(){
+        if(this.health <= 0){
+            this.deathPlayerFrames = ImageManager.loadPlayerDeathImage();
+        }
+        return this.health <= 0;
+    }
+
     public void setMouseLocation(Point p) {
         this.mouseLocation = p;
+    }
+
+    public int getKills(){
+        return this.kills;
     }
 
     public void paint(Graphics g){
@@ -149,24 +167,41 @@ public class Player extends Character{
         g.setColor(Color.RED);
         g.fillOval(mouseLocation.x - 3, mouseLocation.y - 3, 6, 6);
 
+        if(deathPlayerFrames != null && deathFrame < deathPlayerFrames.length){
+            long currentTime = System.currentTimeMillis();
+
+            if(currentTime - lastFrameTime > frameDelay && deathFrame < deathPlayerFrames.length - 1){
+                deathFrame++;
+                lastFrameTime = currentTime;
+            }
+
+            if(deathPlayerFrames[deathFrame] != null){
+                g2d.drawImage(deathPlayerFrames[deathFrame] , this.getX() , this.getY() , PLAYER_WIDTH , PLAYER_HEIGHT , null);
+            }
+
+        }
+
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastFrameTime > frameDelay) {
-            currentFrame = (currentFrame + 1) % walkPlayerFrames.length;
-            lastFrameTime = currentTime;
+        if(!isDead()){
+            if (currentTime - lastFrameTime > frameDelay) {
+                currentFrame = (currentFrame + 1) % walkPlayerFrames.length;
+                lastFrameTime = currentTime;
+            }
+
+            BufferedImage frame = walkPlayerFrames[currentFrame];
+            if (frame != null) {
+                int cx = getX() + PLAYER_WIDTH / 2;
+                int cy = getY() + PLAYER_HEIGHT / 2;
+
+                g2d.rotate(angle, cx, cy);
+                g2d.drawImage(frame, getX(), getY(), PLAYER_WIDTH, PLAYER_HEIGHT, null);
+                g2d.rotate(-angle, cx, cy);
+            } else {
+                g.setColor(Color.BLUE);
+                g.fillRect(getX(), getY(), PLAYER_WIDTH, PLAYER_HEIGHT);
+            }
         }
 
-        BufferedImage frame = walkPlayerFrames[currentFrame];
-        if (frame != null) {
-            int cx = getX() + PLAYER_WIDTH / 2;
-            int cy = getY() + PLAYER_HEIGHT / 2;
-
-            g2d.rotate(angle, cx, cy);
-            g2d.drawImage(frame, getX(), getY(), PLAYER_WIDTH, PLAYER_HEIGHT, null);
-            g2d.rotate(-angle, cx, cy);
-        } else {
-            g.setColor(Color.BLUE);
-            g.fillRect(getX(), getY(), PLAYER_WIDTH, PLAYER_HEIGHT);
-        }
 
     }
 

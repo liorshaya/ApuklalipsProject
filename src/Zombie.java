@@ -29,6 +29,7 @@ public abstract class Zombie{
     private long timeOfDeath = 0;
     private final long deathDelay = 2000;
     private boolean toBeRemoved = false;
+    private boolean isCountedAsKill;
 
     private double dx;
     private double dy;
@@ -53,7 +54,7 @@ public abstract class Zombie{
         this.zombieWidth = zombieWidth;
         this.zombieHeight = zombieHeight;
         this.staticHealthBarWidth = staticHealthBarWidth;
-
+        this.isCountedAsKill = false;
 
         this.walkZombieFrames = walkFrames;
         this.tempDeathZombieFrames = deathFrames;
@@ -74,9 +75,11 @@ public abstract class Zombie{
 
 
     public boolean checkCollision(Rectangle playerRect){
-        Rectangle zombieRect = new Rectangle((int) this.x, (int)this.y, zombieWidth, zombieHeight);
-        if (zombieRect.intersects(playerRect)){
-            return true;
+        if (this.deathZombieFrames == null){
+            Rectangle zombieRect = new Rectangle((int) this.x, (int)this.y, zombieWidth, zombieHeight);
+            if (zombieRect.intersects(playerRect)){
+                return true;
+            }
         }
         return false;
     }
@@ -93,6 +96,13 @@ public abstract class Zombie{
         return this.hitCounter == 0;
     }
 
+    public boolean isCountedAsKill() {
+        return isCountedAsKill;
+    }
+
+    public void setCountedAsKill(boolean countedAsKill) {
+        isCountedAsKill = countedAsKill;
+    }
 
     public void paint(Graphics g) {
 
@@ -120,7 +130,7 @@ public abstract class Zombie{
 
             if (deathFrame == deathZombieFrames.length - 1 && currentTime - timeOfDeath > deathDelay) {
                 this.toBeRemoved = true;
-                this.deathZombieFrames = null;
+//                this.deathZombieFrames = null;
             }
             return;
         }

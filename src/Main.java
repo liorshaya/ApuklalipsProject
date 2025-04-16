@@ -6,7 +6,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-
         JFrame window = new JFrame("Apocalypse");
         window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -18,8 +17,8 @@ public class Main {
         MainMenu mainMenu = new MainMenu(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
         window.add(mainMenu);
 
-        MainScene mainScene = new MainScene(0 ,0,WINDOW_WIDTH , WINDOW_HEIGHT);
-        window.add(mainScene);
+//        MainScene mainScene = new MainScene(0 ,0,WINDOW_WIDTH , WINDOW_HEIGHT);
+//        window.add(mainScene);
 
 
         window.setVisible(true);

@@ -6,8 +6,13 @@ import java.util.Random;
 public class MainScene extends JPanel {
     private Player player;
     private HudPanel hudPanel;
+    private KillsHud killsHud;
+    private endGameText endGameText;
     private int width;
     private int height;
+
+    private boolean isGameLive;
+    private boolean isEndSequenceStarted = false;
 
     private boolean upPressed = false;
     private boolean downPressed = false;
@@ -24,10 +29,17 @@ public class MainScene extends JPanel {
         this.setLayout(null);
         ImageManager.loadBackground();
 
+        this.endGameText = new endGameText(width/2-212 , height/2-100 , 424 , 80);
+        this.add(endGameText);
+
         this.width = width;
         this.height = height;
+        this.isGameLive = true;
 
         this.player = new Player(width/2 - 50,height/2 - 50, width, height , hudPanel);
+
+        this.killsHud = new KillsHud(width-150 , 0, 140, 65, this.player);
+        this.add(killsHud);
 
         this.zombieSpawner();
 
@@ -54,7 +66,7 @@ public class MainScene extends JPanel {
 
     public void mainGameLoop(){
         new Thread(() -> {
-            while (true){
+            while (isGameLive){
                 try {
                     update();
                     repaint();
@@ -63,10 +75,8 @@ public class MainScene extends JPanel {
                     throw new RuntimeException(e);
                 }
             }
-
         }).start();
     }
-
 
 
     public void paintComponent(Graphics g){
@@ -184,32 +194,66 @@ public class MainScene extends JPanel {
     }
 
 
+
     public void update(){
-        if (upPressed) player.moveUp();
-        if (downPressed) player.moveDown();
-        if (leftPressed) player.moveLeft();
-        if (rightPressed) player.moveRight();
+        if (!this.player.isDead()){
+//            this.isGameLive = false;
+            if (upPressed) player.moveUp();
+            if (downPressed) player.moveDown();
+            if (leftPressed) player.moveLeft();
+            if (rightPressed) player.moveRight();
 
-        for (int i = 0; i < this.bullets.length; i++) {
-            if (this.bullets[i] != null){
+            for (int i = 0; i < this.bullets.length; i++) {
+                if (this.bullets[i] != null){
 
-                for (int j = 0; j < this.zombies.length; j++) {
-                    if (zombies[j] != null && !zombies[j].isDead()){
-                        if (this.bullets[i].checkCollision(new Rectangle((int) zombies[j].getX(), (int) zombies[j].getY(), zombies[j].getZombieWidth(), zombies[j].getZombieHeight()))){
-                            zombies[j].bulletHit();
-                            System.out.println("botHit!");
-                            this.zombies[j].zombieHurt();
+                    for (int j = 0; j < this.zombies.length; j++) {
+                        if (zombies[j] != null && !zombies[j].isDead()){
+                            if (this.bullets[i].checkCollision(new Rectangle((int) zombies[j].getX(), (int) zombies[j].getY(), zombies[j].getZombieWidth(), zombies[j].getZombieHeight()))){
+                                zombies[j].bulletHit();
+                                System.out.println("botHit!");
+                                this.zombies[j].zombieHurt();
+                            }
                         }
+                    }
+
+                    this.bullets[i].update();
+
+                    if (this.bullets[i].isBulletOutOfScreen(width, height) || this.bullets[i].getIsHit()){
+                        this.bullets[i] = null;
                     }
                 }
 
-                this.bullets[i].update();
+            }
+        } else{
+            endGameText.ChangeVisible(true);
+            endGameText.ChangeVisible(true);
 
-                if (this.bullets[i].isBulletOutOfScreen(width, height) || this.bullets[i].getIsHit()){
-                    this.bullets[i] = null;
-                }
+            if (!isEndSequenceStarted) {
+                isEndSequenceStarted = true; // שלא יקרה שוב
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(5000); // המתנה של 5 שניות
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    SwingUtilities.invokeLater(() -> {
+                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                        if (topFrame != null) {
+                            topFrame.getContentPane().removeAll();
+                            MainMenu mainMenu = new MainMenu(0, 0, topFrame.getWidth(), topFrame.getHeight());
+                            topFrame.add(mainMenu);
+                            topFrame.revalidate();
+                            topFrame.repaint();
+                            mainMenu.requestFocusInWindow();
+                        }
+                    });
+                }).start();
             }
         }
+
+
+
 
         for (int i = 0; i < this.zombies.length; i++) {
             if (this.zombies[i] != null){
@@ -222,8 +266,10 @@ public class MainScene extends JPanel {
                     }
                 }
 
-                if (zombies[i].getHitCounter() == 0){
+                if (zombies[i].getHitCounter() == 0 && !zombies[i].isCountedAsKill()){
+                    this.zombies[i].setCountedAsKill(true);
                     this.player.playerKill();
+                    this.killsHud.updateKills();
                 }
             }
         }

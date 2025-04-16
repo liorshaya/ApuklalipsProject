@@ -55,6 +55,18 @@ public class ImageManager {
         return walkPlayerFrames;
     }
 
+    public static BufferedImage[] loadPlayerDeathImage(){
+        BufferedImage[] walkPlayerDeathFrames = new BufferedImage[6];
+        for (int i = 0; i < 6; i++) {
+            try {
+                walkPlayerDeathFrames[i] = ImageIO.read(new File("resources/player/Death/death_00" + i + ".png"));
+            } catch (IOException e) {
+                System.out.println("Error with zombie death image.");
+            }
+        }
+        return walkPlayerDeathFrames;
+    }
+
     public static BufferedImage[] loadZombieImage(){
         BufferedImage[] walkZombieFrames = new BufferedImage[9];
         for (int i = 0; i < 9; i++) {
