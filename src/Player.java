@@ -95,7 +95,7 @@ public class Player extends Character{
     public void reload(){
         new Thread(() -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1800);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

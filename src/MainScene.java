@@ -126,7 +126,7 @@ public class MainScene extends JPanel {
                     }
                 }
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(2500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -135,7 +135,7 @@ public class MainScene extends JPanel {
 
         new Thread(() -> {
             try {
-                Thread.sleep(23000);
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -149,7 +149,7 @@ public class MainScene extends JPanel {
                     }
                 }
                 try {
-                    Thread.sleep(rnd.nextInt(15000,25000));
+                    Thread.sleep(rnd.nextInt(10000,20000));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

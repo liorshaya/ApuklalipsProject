@@ -1,8 +1,8 @@
 public class ZombieLvl1Boss extends Zombie{
 
     public ZombieLvl1Boss(int x, int y, int width, int height){
-        super(x, y, width, height, 20, 20, 30, 80,
-                0.4, 96, 96, 80,
+        super(x, y, width, height, 15, 15, 30, 75,
+                0.4, 96, 96, 75,
                 ImageManager.loadZombieBossLvl1Image(),
                 ImageManager.loadZombieDeathBossLvl1Image());
     }
