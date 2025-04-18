@@ -229,10 +229,10 @@ public class MainScene extends JPanel {
             endGameText.ChangeVisible(true);
 
             if (!isEndSequenceStarted) {
-                isEndSequenceStarted = true; // שלא יקרה שוב
+                isEndSequenceStarted = true;
                 new Thread(() -> {
                     try {
-                        Thread.sleep(5000); // המתנה של 5 שניות
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
