@@ -7,6 +7,7 @@ public class ImageManager {
     private static BufferedImage background;
     private static BufferedImage menuBackground;
     private static BufferedImage startButton;
+    private static BufferedImage pauseBackground;
 
     public static void loadBackground(){
         try {
@@ -30,6 +31,18 @@ public class ImageManager {
 
     public static BufferedImage getMenuBackground(){
         return menuBackground;
+    }
+
+    public static void loadPauseBackground(){
+        try {
+            pauseBackground = ImageIO.read(new File("resources/PausePanel/background2.png"));
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+    }
+
+    public static BufferedImage getPauseBackground(){
+        return pauseBackground;
     }
 
     public static void loadStartButton(){
@@ -113,5 +126,29 @@ public class ImageManager {
             }
         }
         return deathZombieBossLvl1Frames;
+    }
+
+    public static BufferedImage[] loadZombieLvl2Image(){
+        BufferedImage[] walkZombieLvl2Frames = new BufferedImage[9];
+        for (int i = 0; i < 9; i++) {
+            try {
+                walkZombieLvl2Frames[i] = ImageIO.read(new File("resources/Zombies/Tier2Regular/Walk/walk_00" + i + ".png"));
+            } catch (IOException e) {
+                System.out.println("Error with zombie boss lvl 1 walk image.");
+            }
+        }
+        return walkZombieLvl2Frames;
+    }
+
+    public static BufferedImage[] loadZombieLvl2DeathImage(){
+        BufferedImage[] deathZombieLvl2Frames = new BufferedImage[6];
+        for (int i = 0; i < 6; i++) {
+            try {
+                deathZombieLvl2Frames[i] = ImageIO.read(new File("resources/Zombies/Tier2Regular/Death/death_00" + i + ".png"));
+            } catch (IOException e) {
+                System.out.println("Error with zombie boss lvl 1 death image.");
+            }
+        }
+        return deathZombieLvl2Frames;
     }
 }

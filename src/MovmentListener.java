@@ -30,6 +30,9 @@ public class MovmentListener implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_A){
             mainScene.setLeftPressed(true);
         }
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            mainScene.setPaused(true);
+        }
     }
 
     @Override
