@@ -10,6 +10,7 @@ public class MainMenu extends JPanel {
             "                     Your goal is to survive as long as possible.\n" +
             "              Use the W, A, S, D keys to navigate the battlefield.\n" +
             "  Aim and shoot with your mouse to fend off the zombie horde.\n" +
+            "             If you need to take a break, press the ESC button.\n" +
             "     Every second counts—stay alert and fight for your life!\n" +
             "       Good luck on your journey to survive the apocalypse!";
 
@@ -47,7 +48,7 @@ public class MainMenu extends JPanel {
         this.rules.setEditable(false);
         this.rules.setOpaque(false);
         this.rules.setText(introText);
-        this.rules.setBounds(width/2 - 570,150,1500,250);
+        this.rules.setBounds(width/2 - 570,150,1500,300);
         this.rules.setFont(descriptionFont);
 
         JButton startButton = new JButton(startIcon);

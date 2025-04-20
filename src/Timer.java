@@ -5,6 +5,8 @@ public class Timer extends JLabel {
     private int seconds;
     private int minutes;
 
+    private boolean isPaused = false;
+
     public Timer(int x, int y, int width, int height){
         this.seconds = 0;
         this.minutes = 0;
@@ -18,7 +20,7 @@ public class Timer extends JLabel {
 
     public void startTimer(){
         new Thread(() -> {
-            while (true){
+            while (!this.isPaused){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -37,5 +39,10 @@ public class Timer extends JLabel {
             }
 
         }).start();
+    }
+
+    public void setPaused(boolean paused){
+        this.isPaused = paused;
+        startTimer();
     }
 }

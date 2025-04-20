@@ -24,6 +24,10 @@ public class MainScene extends JPanel {
 
     private Zombie[] zombies = new Zombie[100];
 
+    private Timer timer;
+
+    private PausePanel pausePanel;
+
 
     public MainScene(int x, int y, int width, int height){
         this.setBounds(x, y, width, height);
@@ -47,8 +51,8 @@ public class MainScene extends JPanel {
         this.setFocusable(true);
         this.requestFocus();
 
-        Timer timer = new Timer(this.width/2 - 60, 0, 300,100);
-        this.add(timer);
+        this.timer = new Timer(this.width/2 - 60, 0, 300,100);
+        this.add(this.timer);
 
         this.hudPanel = new HudPanel(this.player, 0, this.height - 80, 330, 80);
         this.add(hudPanel);
@@ -60,6 +64,8 @@ public class MainScene extends JPanel {
         this.addMouseMotionListener(mouseListener);
 
         this.addKeyListener(new MovmentListener(this,this.player));
+
+        this.pausePanel = new PausePanel(width / 2 - 200, height / 2 - 100, 400, 200, this);
 
         this.mainGameLoop();
 
@@ -76,6 +82,9 @@ public class MainScene extends JPanel {
                     throw new RuntimeException(e);
                 }
             }
+            this.add(this.pausePanel);
+            repaint();
+
         }).start();
     }
 
@@ -131,27 +140,51 @@ public class MainScene extends JPanel {
 
     public void zombieSpawner(){
         Random rnd = new Random();
-        new Thread(() -> {
-            while (true){
-                for (int i = 0; i < this.zombies.length; i++) {
-                    if (this.zombies[i] == null){
-                        int[] randomLocations = randomSpawn();
-                        ZombieLvl1 zombie = new ZombieLvl1(randomLocations[0], randomLocations[1], this.width, this.width);
-                        this.zombies[i] = zombie;
-                        break;
+
+            new Thread(() -> {
+                while (true){
+                    for (int i = 0; i < this.zombies.length; i++) {
+                        if (this.zombies[i] == null){
+                            int[] randomLocations = randomSpawn();
+                            ZombieLvl1 zombie = new ZombieLvl1(randomLocations[0], randomLocations[1], this.width, this.width);
+                            this.zombies[i] = zombie;
+                            break;
+                        }
+                    }
+                    try {
+                        Thread.sleep(2500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }).start();
+
+            new Thread(() -> {
                 try {
-                    Thread.sleep(2500);
+                    Thread.sleep(20000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-            }
-        }).start();
+                while (true){
+                    for (int i = 0; i < this.zombies.length; i++) {
+                        if (this.zombies[i] == null){
+                            int[] randomLocations = randomSpawn();
+                            ZombieLvl1Boss zombieBoss = new ZombieLvl1Boss(randomLocations[0], randomLocations[1], this.width, this.width);
+                            this.zombies[i] = zombieBoss;
+                            break;
+                        }
+                    }
+                    try {
+                        Thread.sleep(rnd.nextInt(10000,20000));
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
 
         new Thread(() -> {
             try {
-                Thread.sleep(20000);
+                Thread.sleep(25000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -159,18 +192,19 @@ public class MainScene extends JPanel {
                 for (int i = 0; i < this.zombies.length; i++) {
                     if (this.zombies[i] == null){
                         int[] randomLocations = randomSpawn();
-                        ZombieLvl1Boss zombieBoss = new ZombieLvl1Boss(randomLocations[0], randomLocations[1], this.width, this.width);
-                        this.zombies[i] = zombieBoss;
+                        ZombieLvl2 zombieLvl2 = new ZombieLvl2(randomLocations[0], randomLocations[1], this.width, this.width);
+                        this.zombies[i] = zombieLvl2;
                         break;
                     }
                 }
                 try {
-                    Thread.sleep(rnd.nextInt(10000,20000));
+                    Thread.sleep(rnd.nextInt(7000,20000));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }).start();
+
     }
 
     public int[] randomSpawn(){
