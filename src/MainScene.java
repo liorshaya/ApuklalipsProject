@@ -18,6 +18,7 @@ public class MainScene extends JPanel {
     private boolean downPressed = false;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
+    private boolean isPaused = false;
 
     private Bullet[] bullets = new Bullet[100];
 
@@ -66,7 +67,7 @@ public class MainScene extends JPanel {
 
     public void mainGameLoop(){
         new Thread(() -> {
-            while (isGameLive){
+            while (isGameLive && !isPaused){
                 try {
                     update();
                     repaint();
@@ -120,6 +121,11 @@ public class MainScene extends JPanel {
 
     public void setRightPressed(boolean rightPressed) {
         this.rightPressed = rightPressed;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+        this.timer.setPaused(paused);
     }
 
 
