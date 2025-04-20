@@ -20,22 +20,30 @@ public class Timer extends JLabel {
 
     public void startTimer(){
         new Thread(() -> {
-            while (!this.isPaused){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            while (true) {
+                if (isPaused) {
+                    try {
+                        Thread.sleep(100);
+                        continue;
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    this.seconds++;
+                    if (this.seconds == 60) {
+                        this.seconds = 0;
+                        this.minutes++;
+                    }
+
+                    String textTime = String.format("%02d : %02d", this.minutes, this.seconds);
+                    this.setText(textTime);
                 }
-
-                this.seconds++;
-                if(this.seconds == 60){
-                    this.seconds = 0;
-                    this.minutes++;
-                }
-
-                String textTime = String.format("%02d : %02d" , this.minutes , this.seconds);
-                this.setText(textTime);
-
             }
 
         }).start();
@@ -43,6 +51,5 @@ public class Timer extends JLabel {
 
     public void setPaused(boolean paused){
         this.isPaused = paused;
-        startTimer();
     }
 }

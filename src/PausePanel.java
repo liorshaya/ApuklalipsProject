@@ -11,7 +11,6 @@ public class PausePanel extends JPanel {
 
         this.setBounds(x, y, width, height);
         this.setLayout(null);
-//        this.setBackground(Color.BLACK);
 
         ImageManager.loadPauseBackground();
 
@@ -45,7 +44,7 @@ public class PausePanel extends JPanel {
 
             this.mainScene.setPaused(false);
             this.mainScene.mainGameLoop();
-            this.mainScene.zombieSpawner();
+//            this.mainScene.zombieSpawner();
         });
 
         this.add(label);
