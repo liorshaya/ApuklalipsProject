@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class MainScene extends JPanel {
+    private final Random rnd = new Random();
+
     private Player player;
     private HudPanel hudPanel;
     private KillsHud killsHud;
@@ -19,6 +21,24 @@ public class MainScene extends JPanel {
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean isPaused = false;
+
+
+    // === countdowns לכל סוג זומבי ===
+    private long nextLvl1Spawn     = 2_500;    // כל 2.5 שניות
+    private final long lvl1Interval = 2_500;
+
+    private long nextBoss1Spawn = 20_000;         // מתחיל ב–20s
+    private final long boss1Min = 10_000, boss1Max = 20_000;
+
+    private long nextLvl2Spawn = 25_000;          // מתחיל ב–25s
+    private final long lvl2Min = 7_000,  lvl2Max = 17_000;
+
+    private long nextBoss2Spawn     = 60_000; // כל 60s
+    private long nextBoss3Spawn     = 127_000;// כל 127s
+    private long nextBoss4Spawn     = 215_000;// כל 215s
+
+    // ——————————————————————————
+
 
     private Bullet[] bullets = new Bullet[100];
 
@@ -46,7 +66,7 @@ public class MainScene extends JPanel {
         this.killsHud = new KillsHud(width-150 , 0, 140, 65, this.player);
         this.add(killsHud);
 
-        this.zombieSpawner();
+//        this.zombieSpawner();
 
         this.setFocusable(true);
         this.requestFocus();
@@ -348,6 +368,15 @@ public class MainScene extends JPanel {
 
     }
 
+    public void spawn(Zombie z) {
+        for (int i = 0; i < zombies.length; i++) {
+            if (zombies[i] == null) {
+                zombies[i] = z;
+                break;
+            }
+        }
+    }
+
     public int[] randomSpawn(){
         Random rnd = new Random();
         int pickPlace = rnd.nextInt(0,4);
@@ -454,6 +483,58 @@ public class MainScene extends JPanel {
                 }
             }
         }
+
+
+        long delta = 10;
+
+        this.nextLvl1Spawn -= delta;
+        if (this.nextLvl1Spawn <= 0) {
+            int[] randomLocations = randomSpawn();
+            spawn(new ZombieLvl1(randomLocations[0], randomLocations[1], width, height));
+            this.nextLvl1Spawn += this.lvl1Interval;
+        }
+
+        nextBoss1Spawn -= delta;
+        if (nextBoss1Spawn <= 0) {
+            int[] randomLocations = randomSpawn();
+            spawn(new ZombieLvl1Boss(randomLocations[0], randomLocations[1], width, height));
+            nextBoss1Spawn = rnd.nextInt((int)boss1Min, (int)boss1Max);
+        }
+
+        nextLvl2Spawn -= delta;
+        if (nextLvl2Spawn <= 0) {
+            int[] randomLocations = randomSpawn();
+            spawn(new ZombieLvl2(randomLocations[0], randomLocations[1], width, height));
+            nextLvl2Spawn = rnd.nextInt((int)lvl2Min, (int)lvl2Max);
+        }
+
+        nextBoss2Spawn -= delta;
+        if (nextBoss2Spawn <= 0) {
+            int[] randomLocations = randomSpawn();
+            spawn(new ZombieLvl2Boss(randomLocations[0], randomLocations[1], width, height));
+            nextBoss2Spawn += 60_000;
+        }
+
+        nextBoss3Spawn -= delta;
+        if (nextBoss3Spawn <= 0) {
+            int[] randomLocations = randomSpawn();
+            spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
+            nextBoss3Spawn += 127_000;
+        }
+
+        nextBoss4Spawn -= delta;
+        if (nextBoss4Spawn <= 0) {
+            int[] randomLocations = randomSpawn();
+            spawn(new ZombieLvl4Boss(randomLocations[0], randomLocations[1], width, height));
+            nextBoss4Spawn += 215_000;
+        }
+
+//        nextBoss5Spawn -= delta;
+//        if (nextBoss5Spawn <= 0) {
+//            int[] randomLocations = randomSpawn();
+//            spawn(new ZombieLvl5Boss(randomLocations[0], randomLocations[1], width, height));
+//            nextBoss5Spawn += 215_000;
+//        }
 
     }
 }
