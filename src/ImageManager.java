@@ -8,10 +8,12 @@ public class ImageManager {
     private static BufferedImage menuBackground;
     private static BufferedImage startButton;
     private static BufferedImage pauseBackground;
+    private static BufferedImage backBackground;
+
 
     public static void loadBackground() {
         try {
-            background = ImageIO.read(new File("resources/MainBackground/background.png"));
+            background = ImageIO.read(new File("resources/MainBackground/newBackground3.png"));
         } catch (IOException e) {
             System.out.println("Error");
         }
@@ -35,7 +37,7 @@ public class ImageManager {
 
     public static void loadPauseBackground() {
         try {
-            pauseBackground = ImageIO.read(new File("resources/PausePanel/background2.png"));
+            pauseBackground = ImageIO.read(new File("resources/PausePanel/background.png"));
         } catch (IOException e) {
             System.out.println("Error");
         }
@@ -45,17 +47,29 @@ public class ImageManager {
         return pauseBackground;
     }
 
-    public static void loadStartButton() {
+    public static void loadRulesBackground() {
         try {
-            startButton = ImageIO.read(new File("resources/MainMenu/startButton.png"));
+            backBackground = ImageIO.read(new File("resources/RulesMenu/HowToPlayBackground.png"));
         } catch (IOException e) {
             System.out.println("Error");
         }
     }
 
-    public static BufferedImage getStartButton() {
-        return startButton;
+    public static BufferedImage getRulesBackground() {
+        return backBackground;
     }
+
+//    public static void loadStartButton() {
+//        try {
+//            startButton = ImageIO.read(new File("resources/MainMenu/OldStartButton.png"));
+//        } catch (IOException e) {
+//            System.out.println("Error");
+//        }
+//    }
+//
+//    public static BufferedImage getStartButton() {
+//        return startButton;
+//    }
 
     public static BufferedImage[] loadPlayerImage() {
         BufferedImage[] walkPlayerFrames = new BufferedImage[6];

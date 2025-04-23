@@ -6,15 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainMenu extends JPanel {
-    public static final String introText =
-            "                     Your goal is to survive as long as possible.\n" +
-            "              Use the W, A, S, D keys to navigate the battlefield.\n" +
-            "  Aim and shoot with your mouse to fend off the zombie horde.\n" +
-            "             If you need to take a break, press the ESC button.\n" +
-            "     Every second counts—stay alert and fight for your life!\n" +
-            "       Good luck on your journey to survive the apocalypse!";
-
-    private JTextArea rules;
     private JLabel headLine;
 
 
@@ -22,14 +13,14 @@ public class MainMenu extends JPanel {
         Font headLineFont = null;
         Font descriptionFont = null;
         try {
-            headLineFont = Font.createFont(Font.TRUETYPE_FONT, new File("resources/Fonts/MeltedMonster.ttf")).deriveFont(70f);
-            descriptionFont = Font.createFont(Font.TRUETYPE_FONT, new File("resources/Fonts/GoodBrush.ttf")).deriveFont(40f);
+            headLineFont = Font.createFont(Font.TRUETYPE_FONT, new File("resources/Fonts/MeltedMonster.ttf")).deriveFont(90f);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
             headLineFont = new Font("Arial", Font.BOLD, 40);
             descriptionFont = new Font("Arial", Font.BOLD, 30);
         }
-        ImageIcon startIcon = new ImageIcon("resources/MainMenu/startButton.png");
+        ImageIcon startIcon = new ImageIcon("resources/MainMenu/StartButton.png");
+        ImageIcon rulesIcon = new ImageIcon("resources/MainMenu/HowToPlayButton.png");
 
 
         this.setBounds(x, y, width, height);
@@ -39,20 +30,13 @@ public class MainMenu extends JPanel {
 
         this.headLine = new JLabel();
         this.headLine.setText("Welcome to Apocalypse!");
-        this.headLine.setBounds(width/2-390, 20, 780, 60);
-        this.headLine.setForeground(new Color(0x320C0C));
+        this.headLine.setBounds(width/2-500, 40, 1000, 80);
+        this.headLine.setForeground(new Color(0x7E7811));
         this.headLine.setFont(headLineFont);
 
-        this.rules = new JTextArea();
-        this.rules.setFocusable(false);
-        this.rules.setEditable(false);
-        this.rules.setOpaque(false);
-        this.rules.setText(introText);
-        this.rules.setBounds(width/2 - 570,150,1500,300);
-        this.rules.setFont(descriptionFont);
 
         JButton startButton = new JButton(startIcon);
-        startButton.setBounds(getWidth()/2 - 460, getHeight() - 200, 921, 170);
+        startButton.setBounds(getWidth()/2 - 200, getHeight() - 200, 400, 170);
         startButton.setBorderPainted(false);
         startButton.setContentAreaFilled(false);
         startButton.setFocusPainted(false);
@@ -69,11 +53,31 @@ public class MainMenu extends JPanel {
             topFrame.repaint();
             mainScene.requestFocusInWindow();
         });
-        startButton.setOpaque(false);
-        // TRY
+
+
+
+
+        JButton rulesButton = new JButton(rulesIcon);
+        rulesButton.setBounds(0, getHeight() - 140, 230, 90);
+        rulesButton.setBorderPainted(false);
+        rulesButton.setContentAreaFilled(false);
+        rulesButton.setFocusPainted(false);
+        rulesButton.setOpaque(false);
+        rulesButton.setRolloverIcon(new ImageIcon("resources/MainMenu/2ndHowToPlayButton1.png"));
+
+        rulesButton.addActionListener(e -> {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.getContentPane().removeAll();
+            RulesMenu rulesMenu = new RulesMenu(0, 0, topFrame.getWidth(), topFrame.getHeight());
+            topFrame.add(rulesMenu);
+            topFrame.revalidate();
+            topFrame.repaint();
+            rulesMenu.requestFocusInWindow();
+        });
+
 
         this.add(this.headLine);
-        this.add(this.rules);
+        this.add(rulesButton);
         this.add(startButton);
 
 
