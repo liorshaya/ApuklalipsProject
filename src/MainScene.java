@@ -407,7 +407,6 @@ public class MainScene extends JPanel {
 
     public void update(){
         if (!this.player.isDead()){
-//            this.isGameLive = false;
             if (upPressed) player.moveUp();
             if (downPressed) player.moveDown();
             if (leftPressed) player.moveLeft();
@@ -436,7 +435,6 @@ public class MainScene extends JPanel {
             }
         } else{
             endGameText.ChangeVisible(true);
-            endGameText.ChangeVisible(true);
 
             if (!isEndSequenceStarted) {
                 isEndSequenceStarted = true;
@@ -446,6 +444,7 @@ public class MainScene extends JPanel {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    this.isGameLive = false;
 
                     SwingUtilities.invokeLater(() -> {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);

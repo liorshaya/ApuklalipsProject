@@ -11,13 +11,11 @@ public class MainMenu extends JPanel {
 
     public MainMenu(int x, int y, int width, int height){
         Font headLineFont = null;
-        Font descriptionFont = null;
         try {
             headLineFont = Font.createFont(Font.TRUETYPE_FONT, new File("resources/Fonts/MeltedMonster.ttf")).deriveFont(90f);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
             headLineFont = new Font("Arial", Font.BOLD, 40);
-            descriptionFont = new Font("Arial", Font.BOLD, 30);
         }
         ImageIcon startIcon = new ImageIcon("resources/MainMenu/StartButton.png");
         ImageIcon rulesIcon = new ImageIcon("resources/MainMenu/HowToPlayButton.png");
@@ -35,6 +33,7 @@ public class MainMenu extends JPanel {
         this.headLine.setFont(headLineFont);
 
 
+
         JButton startButton = new JButton(startIcon);
         startButton.setBounds(getWidth()/2 - 200, getHeight() - 200, 400, 170);
         startButton.setBorderPainted(false);
@@ -43,7 +42,6 @@ public class MainMenu extends JPanel {
         startButton.setOpaque(false);
         startButton.setRolloverIcon(new ImageIcon("resources/MainMenu/2ndStartButton.png"));
 
-        // TRY
         startButton.addActionListener(e -> {
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             topFrame.getContentPane().removeAll();
@@ -82,8 +80,6 @@ public class MainMenu extends JPanel {
 
 
     }
-
-
 
 
     public void paintComponent(Graphics g) {
