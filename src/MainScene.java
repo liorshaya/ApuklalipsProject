@@ -23,21 +23,26 @@ public class MainScene extends JPanel {
     private boolean isPaused = false;
 
 
-    // === countdowns לכל סוג זומבי ===
-    private long nextLvl1Spawn     = 2_500;    // כל 2.5 שניות
-    private final long lvl1Interval = 2_500;
+    private int nextLvl1Spawn     = 2_500;    // כל 2.5 שניות
+    private final int lvl1Interval = 2_500;
 
-    private long nextBoss1Spawn = 20_000;         // מתחיל ב–20s
-    private final long boss1Min = 10_000, boss1Max = 20_000;
+    private int nextBoss1Spawn = 20_000;         // מתחיל ב–20s
+    private final int boss1Min = 10_000, boss1Max = 20_000;
 
-    private long nextLvl2Spawn = 25_000;          // מתחיל ב–25s
-    private final long lvl2Min = 7_000,  lvl2Max = 17_000;
+    private int nextLvl2Spawn = 25_000;          // מתחיל ב–25s
+    private final int lvl2Min = 7_000,  lvl2Max = 17_000;
 
-    private long nextBoss2Spawn     = 60_000; // כל 60s
-    private long nextBoss3Spawn     = 127_000;// כל 127s
-    private long nextBoss4Spawn     = 215_000;// כל 215s
+    private int nextBoss2Spawn     = 60_000; // כל 60s
+    private final int Boss2Interval = 60_000;
 
-    // ——————————————————————————
+    private int nextBoss3Spawn     = 127_000;// כל 127s
+    private final int Boss3Interval = 127_000;
+
+    private int nextBoss4Spawn     = 215_000;// כל 215s
+    private final int Boss4Interval = 215_000;
+
+    private int nextBoss5Spawn     = 215_000;// כל 215s
+    private final int Boss5Interval = 215_000;
 
 
     private Bullet[] bullets = new Bullet[100];
@@ -66,7 +71,7 @@ public class MainScene extends JPanel {
         this.killsHud = new KillsHud(width-150 , 0, 140, 65, this.player);
         this.add(killsHud);
 
-//        this.zombieSpawner();
+        this.startSpawnerThread();
 
         this.setFocusable(true);
         this.requestFocus();
@@ -97,7 +102,7 @@ public class MainScene extends JPanel {
                 try {
                     update();
                     repaint();
-                    Thread.sleep(10);
+                    Thread.sleep(7);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -158,214 +163,274 @@ public class MainScene extends JPanel {
     }
 
 
-    public void zombieSpawner(){
-        Random rnd = new Random();
+//    public void zombieSpawner(){
+//        Random rnd = new Random();
+//
+//        new Thread(() -> {
+//            while (true) {
+//                if (isPaused) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//
+//                    try {
+//                        Thread.sleep(2500);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//
+//                    for (int i = 0; i < this.zombies.length; i++) {
+//                        if (this.zombies[i] == null){
+//                            int[] randomLocations = randomSpawn();
+//                            ZombieLvl1 zombie = new ZombieLvl1(randomLocations[0], randomLocations[1], this.width, this.height);
+//                            this.zombies[i] = zombie;
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(20000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                while (true){
+//                    if (isPaused) {
+//                        try {
+//                            Thread.sleep(1000);
+//                            continue;
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    } else {
+//                        for (int i = 0; i < this.zombies.length; i++) {
+//                            if (this.zombies[i] == null) {
+//                                int[] randomLocations = randomSpawn();
+//                                ZombieLvl1Boss zombieBoss = new ZombieLvl1Boss(randomLocations[0], randomLocations[1], this.width, this.height);
+//                                this.zombies[i] = zombieBoss;
+//                                break;
+//                            }
+//                        }
+//                        try {
+//                            Thread.sleep(rnd.nextInt(10000, 20000));
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                }
+//            }).start();
+//
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(25000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            while (true){
+//                if (isPaused) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    for (int i = 0; i < this.zombies.length; i++) {
+//                        if (this.zombies[i] == null) {
+//                            int[] randomLocations = randomSpawn();
+//                            ZombieLvl2 zombieLvl2 = new ZombieLvl2(randomLocations[0], randomLocations[1], this.width, this.height);
+//                            this.zombies[i] = zombieLvl2;
+//                            break;
+//                        }
+//                    }
+//                    try {
+//                        Thread.sleep(rnd.nextInt(7000, 17000));
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//        new Thread(() -> {
+//            while (true){
+//                if (isPaused) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    try {
+//                        Thread.sleep(60000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    for (int i = 0; i < this.zombies.length; i++) {
+//                        if (this.zombies[i] == null) {
+//                            int[] randomLocations = randomSpawn();
+//                            ZombieLvl2Boss zombieLvl2Boss = new ZombieLvl2Boss(randomLocations[0], randomLocations[1], this.width, this.height);
+//                            this.zombies[i] = zombieLvl2Boss;
+//
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//        new Thread(() -> {
+//            while (true){
+//                if (isPaused) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    try {
+//                        Thread.sleep(127000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    for (int i = 0; i < this.zombies.length; i++) {
+//                        if (this.zombies[i] == null) {
+//                            int[] randomLocations = randomSpawn();
+//                            ZombieLvl3Boss zombieLvl3Boss = new ZombieLvl3Boss(randomLocations[0], randomLocations[1], this.width, this.height);
+//                            this.zombies[i] = zombieLvl3Boss;
+//
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//        new Thread(() -> {
+//            while (true){
+//                if (isPaused) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    try {
+//                        Thread.sleep(215000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    for (int i = 0; i < this.zombies.length; i++) {
+//                        if (this.zombies[i] == null) {
+//                            int[] randomLocations = randomSpawn();
+//                            ZombieLvl4Boss zombieLvl4Boss = new ZombieLvl4Boss(randomLocations[0], randomLocations[1], this.width, this.height);
+//                            this.zombies[i] = zombieLvl4Boss;
+//
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//        new Thread(() -> {
+//            while (true){
+//                if (isPaused) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    try {
+//                        Thread.sleep(21000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    for (int i = 0; i < this.zombies.length; i++) {
+//                        if (this.zombies[i] == null) {
+//                            int[] randomLocations = randomSpawn();
+//                            ZombieLvl5Boss zombieLvl5Boss = new ZombieLvl5Boss(randomLocations[0], randomLocations[1], this.width, this.height);
+//                            this.zombies[i] = zombieLvl5Boss;
+//
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//    }
 
+    private void startSpawnerThread() {
         new Thread(() -> {
-            while (true) {
-                if (isPaused) {
-                    try {
-                        Thread.sleep(1000);
-                        continue;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
+            int delta = 500;
 
-                    try {
-                        Thread.sleep(2500);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+            while (isGameLive) {
+                if (!isPaused) {
+
+                    this.nextLvl1Spawn -= delta;
+                    if (this.nextLvl1Spawn <= 0) {
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl1(randomLocations[0], randomLocations[1], width, height));
+                        this.nextLvl1Spawn = lvl1Interval;
+                    }
+                    this.nextBoss1Spawn -= delta;
+                    if (this.nextBoss1Spawn <= 0) {
+                        System.out.println("BOSS1");
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl1Boss(randomLocations[0], randomLocations[1], width, height));
+                        this.nextBoss1Spawn = rnd.nextInt(boss1Min, boss1Max);
+                    }
+                    this.nextLvl2Spawn -= delta;
+                    if (this.nextLvl2Spawn <= 0) {
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl2(randomLocations[0], randomLocations[1], width, height));
+                        this.nextLvl2Spawn = rnd.nextInt(lvl2Min, lvl2Max);
+                    }
+                    this.nextBoss2Spawn -= delta;
+                    if (this.nextBoss2Spawn <= 0) {
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl2Boss(randomLocations[0], randomLocations[1], width, height));
+                        this.nextBoss2Spawn = Boss2Interval;
+                    }
+                    this.nextBoss3Spawn -= delta;
+                    if (this.nextBoss3Spawn <= 0) {
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
+                        this.nextBoss3Spawn = Boss3Interval;
+                    }
+                    this.nextBoss4Spawn -= delta;
+                    if (this.nextBoss4Spawn <= 0) {
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
+                        this.nextBoss4Spawn = Boss4Interval;
+                    }
+                    this.nextBoss5Spawn -= delta;
+                    if (this.nextBoss5Spawn <= 0) {
+                        int[] randomLocations = randomSpawn();
+                        spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
+                        this.nextBoss5Spawn = Boss5Interval;
                     }
 
-                    for (int i = 0; i < this.zombies.length; i++) {
-                        if (this.zombies[i] == null){
-                            int[] randomLocations = randomSpawn();
-                            ZombieLvl1 zombie = new ZombieLvl1(randomLocations[0], randomLocations[1], this.width, this.height);
-                            this.zombies[i] = zombie;
-                            break;
-                        }
-                    }
+
                 }
-            }
-        }).start();
-
-            new Thread(() -> {
                 try {
-                    Thread.sleep(20000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                while (true){
-                    if (isPaused) {
-                        try {
-                            Thread.sleep(1000);
-                            continue;
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-                        for (int i = 0; i < this.zombies.length; i++) {
-                            if (this.zombies[i] == null) {
-                                int[] randomLocations = randomSpawn();
-                                ZombieLvl1Boss zombieBoss = new ZombieLvl1Boss(randomLocations[0], randomLocations[1], this.width, this.height);
-                                this.zombies[i] = zombieBoss;
-                                break;
-                            }
-                        }
-                        try {
-                            Thread.sleep(rnd.nextInt(10000, 20000));
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }).start();
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(25000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            while (true){
-                if (isPaused) {
-                    try {
-                        Thread.sleep(1000);
-                        continue;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    for (int i = 0; i < this.zombies.length; i++) {
-                        if (this.zombies[i] == null) {
-                            int[] randomLocations = randomSpawn();
-                            ZombieLvl2 zombieLvl2 = new ZombieLvl2(randomLocations[0], randomLocations[1], this.width, this.height);
-                            this.zombies[i] = zombieLvl2;
-                            break;
-                        }
-                    }
-                    try {
-                        Thread.sleep(rnd.nextInt(7000, 17000));
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                    Thread.sleep(delta);
+                } catch (InterruptedException ignored){}
             }
         }).start();
-
-        new Thread(() -> {
-            while (true){
-                if (isPaused) {
-                    try {
-                        Thread.sleep(1000);
-                        continue;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    for (int i = 0; i < this.zombies.length; i++) {
-                        if (this.zombies[i] == null) {
-                            int[] randomLocations = randomSpawn();
-                            ZombieLvl2Boss zombieLvl2Boss = new ZombieLvl2Boss(randomLocations[0], randomLocations[1], this.width, this.height);
-                            this.zombies[i] = zombieLvl2Boss;
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }).start();
-
-        new Thread(() -> {
-            while (true){
-                if (isPaused) {
-                    try {
-                        Thread.sleep(1000);
-                        continue;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    try {
-                        Thread.sleep(127000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    for (int i = 0; i < this.zombies.length; i++) {
-                        if (this.zombies[i] == null) {
-                            int[] randomLocations = randomSpawn();
-                            ZombieLvl3Boss zombieLvl3Boss = new ZombieLvl3Boss(randomLocations[0], randomLocations[1], this.width, this.height);
-                            this.zombies[i] = zombieLvl3Boss;
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }).start();
-
-        new Thread(() -> {
-            while (true){
-                if (isPaused) {
-                    try {
-                        Thread.sleep(1000);
-                        continue;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    try {
-                        Thread.sleep(215000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    for (int i = 0; i < this.zombies.length; i++) {
-                        if (this.zombies[i] == null) {
-                            int[] randomLocations = randomSpawn();
-                            ZombieLvl4Boss zombieLvl4Boss = new ZombieLvl4Boss(randomLocations[0], randomLocations[1], this.width, this.height);
-                            this.zombies[i] = zombieLvl4Boss;
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }).start();
-
-        new Thread(() -> {
-            while (true){
-                if (isPaused) {
-                    try {
-                        Thread.sleep(1000);
-                        continue;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    try {
-                        Thread.sleep(21000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    for (int i = 0; i < this.zombies.length; i++) {
-                        if (this.zombies[i] == null) {
-                            int[] randomLocations = randomSpawn();
-                            ZombieLvl5Boss zombieLvl5Boss = new ZombieLvl5Boss(randomLocations[0], randomLocations[1], this.width, this.height);
-                            this.zombies[i] = zombieLvl5Boss;
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }).start();
-
     }
 
     public void spawn(Zombie z) {
@@ -381,7 +446,7 @@ public class MainScene extends JPanel {
         Random rnd = new Random();
         int pickPlace = rnd.nextInt(0,4);
         int[] randoms = new int[2];
-        System.out.println("pickPlace" + pickPlace);
+//        System.out.println("pickPlace" + pickPlace);
         switch (pickPlace){
             case 0:
                 randoms[0] = rnd.nextInt(0,this.getWidth()+1);
@@ -419,7 +484,7 @@ public class MainScene extends JPanel {
                         if (zombies[j] != null && !zombies[j].isDead()){
                             if (this.bullets[i].checkCollision(new Rectangle((int) zombies[j].getX(), (int) zombies[j].getY(), zombies[j].getZombieWidth(), zombies[j].getZombieHeight()))){
                                 zombies[j].bulletHit();
-                                System.out.println("botHit!");
+//                                System.out.println("botHit!");
                                 this.zombies[j].zombieHurt();
                             }
                         }
@@ -463,13 +528,12 @@ public class MainScene extends JPanel {
 
 
 
-
         for (int i = 0; i < this.zombies.length; i++) {
             if (this.zombies[i] != null){
                 this.zombies[i].move(this.player.getX(), this.player.getY());
                 if (!this.player.getIsHitted()){
                     if (this.zombies[i].checkCollision(new Rectangle(this.player.getX(), this.player.getY() ,this.player.getPlayerWidth(), this.player.getPlayerHeight()))){
-                        System.out.println("HIT!");
+//                        System.out.println("HIT!");
                         this.player.hurt(this.zombies[i].getHitDamage());
                         this.hudPanel.hurt(this.zombies[i].getHitDamage());
                     }
@@ -482,58 +546,6 @@ public class MainScene extends JPanel {
                 }
             }
         }
-
-
-        long delta = 10;
-
-        this.nextLvl1Spawn -= delta;
-        if (this.nextLvl1Spawn <= 0) {
-            int[] randomLocations = randomSpawn();
-            spawn(new ZombieLvl1(randomLocations[0], randomLocations[1], width, height));
-            this.nextLvl1Spawn += this.lvl1Interval;
-        }
-
-        nextBoss1Spawn -= delta;
-        if (nextBoss1Spawn <= 0) {
-            int[] randomLocations = randomSpawn();
-            spawn(new ZombieLvl1Boss(randomLocations[0], randomLocations[1], width, height));
-            nextBoss1Spawn = rnd.nextInt((int)boss1Min, (int)boss1Max);
-        }
-
-        nextLvl2Spawn -= delta;
-        if (nextLvl2Spawn <= 0) {
-            int[] randomLocations = randomSpawn();
-            spawn(new ZombieLvl2(randomLocations[0], randomLocations[1], width, height));
-            nextLvl2Spawn = rnd.nextInt((int)lvl2Min, (int)lvl2Max);
-        }
-
-        nextBoss2Spawn -= delta;
-        if (nextBoss2Spawn <= 0) {
-            int[] randomLocations = randomSpawn();
-            spawn(new ZombieLvl2Boss(randomLocations[0], randomLocations[1], width, height));
-            nextBoss2Spawn += 60_000;
-        }
-
-        nextBoss3Spawn -= delta;
-        if (nextBoss3Spawn <= 0) {
-            int[] randomLocations = randomSpawn();
-            spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
-            nextBoss3Spawn += 127_000;
-        }
-
-        nextBoss4Spawn -= delta;
-        if (nextBoss4Spawn <= 0) {
-            int[] randomLocations = randomSpawn();
-            spawn(new ZombieLvl4Boss(randomLocations[0], randomLocations[1], width, height));
-            nextBoss4Spawn += 215_000;
-        }
-
-//        nextBoss5Spawn -= delta;
-//        if (nextBoss5Spawn <= 0) {
-//            int[] randomLocations = randomSpawn();
-//            spawn(new ZombieLvl5Boss(randomLocations[0], randomLocations[1], width, height));
-//            nextBoss5Spawn += 215_000;
-//        }
 
     }
 }
