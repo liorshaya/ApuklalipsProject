@@ -37,7 +37,7 @@ public class ImageManager {
 
     public static void loadPauseBackground() {
         try {
-            pauseBackground = ImageIO.read(new File("resources/PausePanel/background.png"));
+            pauseBackground = ImageIO.read(new File("resources/PausePanel/background2.png"));
         } catch (IOException e) {
             System.out.println("Error");
         }
@@ -75,7 +75,9 @@ public class ImageManager {
         BufferedImage[] walkPlayerFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
             try {
-                walkPlayerFrames[i] = ImageIO.read(new File("resources/player/walk/Walk_riffle_00" + i + ".png"));
+                 walkPlayerFrames[i] = ImageIO.read(new File("resources/player/walk/Walk_riffle_00" + i + ".png"));
+               // walkPlayerFrames[i] = ImageIO.read(new File("resources/player/withShield/walkShield_00" + i + ".png"));
+
             } catch (IOException e) {
                 System.out.println("Error with player image.");
             }
@@ -266,5 +268,54 @@ public class ImageManager {
             }
         }
         return deathZombieLvl5BossFrames;
+    }
+
+    //ABILITIES
+    private static BufferedImage healthAbility;
+    private static BufferedImage speedAbility;
+    private static BufferedImage shieldAbility;
+
+
+    public static void loadHealthAbility() {
+        healthAbility = null;
+            try {
+                healthAbility = ImageIO.read(new File("resources/Abilities/healthAbility.png"));
+            } catch (IOException e) {
+                System.out.println("Error loading healthAbility image.");
+            }
+
+    }
+
+    public static BufferedImage getHealthAbility() {
+        return healthAbility;
+    }
+
+
+    public static void loadSpeedAbility() {
+        speedAbility = null;
+        try {
+            speedAbility = ImageIO.read(new File("resources/Abilities/speedAbility.png"));
+        } catch (IOException e) {
+            System.out.println("Error loading speedAbility image.");
+        }
+
+    }
+
+    public static BufferedImage getSpeedAbility() {
+        return speedAbility;
+    }
+
+    public static void loadShieldAbility() {
+        shieldAbility = null;
+        try {
+            shieldAbility = ImageIO.read(new File("resources/Abilities/shiledAbility.png"));
+        } catch (IOException e) {
+            System.out.println("Error loading shieldAbility image.");
+        }
+
+    }
+
+    public static BufferedImage getShieldAbility() {
+        return shieldAbility;
     }
 }

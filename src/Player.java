@@ -11,6 +11,7 @@ public class Player extends Character{
     private boolean isReloading;
     private int health;
     private boolean isHitted;
+    private boolean isShilded;
     private HudPanel hudPanel;
 
 
@@ -50,18 +51,18 @@ public class Player extends Character{
 
     public void moveLeft(){
         if (this.getX() != 0){
-            this.setX(this.getX()-1);
+            this.setX(this.getX() - this.speed);
         }
     }
 
     public void moveUp(){
         if (this.getY() != 0) {
-            this.setY(this.getY()-1);
+            this.setY(this.getY() - this.speed);
         }
     }
     public void moveDown(){
         if (this.getY() + PLAYER_HEIGHT != this.getHeight()) {
-            this.setY(this.getY()+1);
+            this.setY(this.getY() + this.speed);
 
         }
     }
@@ -151,6 +152,50 @@ public class Player extends Character{
     public int getKills(){
         return this.kills;
     }
+
+    public void activateSpeedAbility(){
+        if(!this.isSpeedAbilityActive){
+            this.isSpeedAbilityActive = true;
+            this.speed = 2;
+            this.speedAbilityStartTime = System.currentTimeMillis();
+        }
+
+    }
+
+    public void activateShieldAbility(){
+        if (!this.isShiledAbilityActive) {
+            this.isShiledAbilityActive = true;
+            this.isShilded = true;
+            this.shieldAbilityStartTime = System.currentTimeMillis();
+        }
+    }
+
+    public void activateHealAbility(){
+        System.out.println("took boost old health:" + this.health);
+        if (this.health <= 80){
+            this.health += 20;
+        } else {
+            this.health = 100;
+        }
+        System.out.println("took boost new health:" + this.health);
+        this.hudPanel.setHealth(this.health);
+    }
+
+    public void update() {
+        long now = System.currentTimeMillis();
+
+        if (isSpeedAbilityActive && now - speedAbilityStartTime >= 10000) {
+            this.speed = 1;
+            this.isSpeedAbilityActive = false;
+        }
+
+        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 10000) {
+            this.isShilded = false;
+            this.isShiledAbilityActive = false;
+        }
+    }
+
+
 
     public void paint(Graphics g){
 

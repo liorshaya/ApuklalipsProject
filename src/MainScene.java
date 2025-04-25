@@ -7,6 +7,7 @@ public class MainScene extends JPanel {
     private final Random rnd = new Random();
 
     private Player player;
+    private Ability ability;
     private HudPanel hudPanel;
     private KillsHud killsHud;
     private endGameText endGameText;
@@ -102,7 +103,7 @@ public class MainScene extends JPanel {
                 try {
                     update();
                     repaint();
-                    Thread.sleep(7);
+                    Thread.sleep(8);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -136,6 +137,12 @@ public class MainScene extends JPanel {
         for (int i = 0; i < bullets.length; i++) {
             if (bullets[i] != null) {
                 bullets[i].paint(g);
+            }
+        }
+
+        for (int i = 0; i < this.abilities.length; i++) {
+            if (abilities[i] != null){
+                this.abilities[i].paint(g);
             }
         }
     }
@@ -472,6 +479,7 @@ public class MainScene extends JPanel {
 
     public void update(){
         if (!this.player.isDead()){
+            this.player.update();
             if (upPressed) player.moveUp();
             if (downPressed) player.moveDown();
             if (leftPressed) player.moveLeft();
