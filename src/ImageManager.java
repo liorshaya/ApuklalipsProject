@@ -318,4 +318,16 @@ public class ImageManager {
     public static BufferedImage getShieldAbility() {
         return shieldAbility;
     }
+
+    public static BufferedImage[] loadPlayerShieldImage() {
+        BufferedImage[] shieldPlayerFrames = new BufferedImage[6];
+        for (int i = 0; i < 6; i++) {
+            try {
+                shieldPlayerFrames[i] = ImageIO.read(new File("resources/player/withShield/walkShield_00" + i + ".png"));
+            } catch (IOException e) {
+                System.out.println("Error with player shield image death image.");
+            }
+        }
+        return shieldPlayerFrames;
+    }
 }

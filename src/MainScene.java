@@ -23,32 +23,50 @@ public class MainScene extends JPanel {
     private boolean rightPressed = false;
     private boolean isPaused = false;
 
-
-    private int nextLvl1Spawn     = 2_500;    // כל 2.5 שניות
+    // ZOMBIES
+    private int nextLvl1Spawn     = 2_500;
     private final int lvl1Interval = 2_500;
 
-    private int nextBoss1Spawn = 20_000;         // מתחיל ב–20s
+    private int nextBoss1Spawn = 20_000;
     private final int boss1Min = 10_000, boss1Max = 20_000;
 
-    private int nextLvl2Spawn = 25_000;          // מתחיל ב–25s
+    private int nextLvl2Spawn = 25_000;
     private final int lvl2Min = 7_000,  lvl2Max = 17_000;
 
-    private int nextBoss2Spawn     = 60_000; // כל 60s
+    private int nextBoss2Spawn     = 60_000;
     private final int Boss2Interval = 60_000;
 
-    private int nextBoss3Spawn     = 127_000;// כל 127s
+    private int nextBoss3Spawn     = 127_000;
     private final int Boss3Interval = 127_000;
 
-    private int nextBoss4Spawn     = 215_000;// כל 215s
+    private int nextBoss4Spawn     = 215_000;
     private final int Boss4Interval = 215_000;
 
-    private int nextBoss5Spawn     = 215_000;// כל 215s
-    private final int Boss5Interval = 215_000;
+    private int nextBoss5Spawn     = 320_000;
+    private final int Boss5Interval = 320_000;
+    // ZOMBIES
 
+
+    //ABILITIES
+    private int healthAbilitySpawn = 10;
+    private final int health1Min = 20, health1Max = 40;
+
+    private int sheildAbilitySpawn = 1;
+    private final int sheild1Min = 30, sheild1Max = 50;
+
+    private int speedAbilitySpawn = 5;
+    private final int speed1Min = 20, speed1Max = 50;
+
+    private int damageAbilitySpawn = 60;
+    private final int damage1Min = 40, damage1Max = 80;
+    //ABILITIES
+    private int killsSinceLastAbility = 0;
 
     private Bullet[] bullets = new Bullet[100];
 
     private Zombie[] zombies = new Zombie[100];
+
+    private Ability[] abilities = new Ability[10];
 
     private Timer timer;
 
@@ -125,18 +143,18 @@ public class MainScene extends JPanel {
 
         this.player.paint(g);
         for (int i = 0; i < this.zombies.length; i++) {
-            if (this.zombies[i] != null && !zombies[i].isToBeRemoved()){
-                zombies[i].paint(g);
+            if (this.zombies[i] != null && !this.zombies[i].isToBeRemoved()){
+                this.zombies[i].paint(g);
             }
             else{
-                zombies[i] = null;
+                this.zombies[i] = null;
             }
 
         }
 
         for (int i = 0; i < bullets.length; i++) {
-            if (bullets[i] != null) {
-                bullets[i].paint(g);
+            if (this.bullets[i] != null) {
+                this.bullets[i].paint(g);
             }
         }
 
@@ -421,13 +439,13 @@ public class MainScene extends JPanel {
                     this.nextBoss4Spawn -= delta;
                     if (this.nextBoss4Spawn <= 0) {
                         int[] randomLocations = randomSpawn();
-                        spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
+                        spawn(new ZombieLvl4Boss(randomLocations[0], randomLocations[1], width, height));
                         this.nextBoss4Spawn = Boss4Interval;
                     }
                     this.nextBoss5Spawn -= delta;
                     if (this.nextBoss5Spawn <= 0) {
                         int[] randomLocations = randomSpawn();
-                        spawn(new ZombieLvl3Boss(randomLocations[0], randomLocations[1], width, height));
+                        spawn(new ZombieLvl5Boss(randomLocations[0], randomLocations[1], width, height));
                         this.nextBoss5Spawn = Boss5Interval;
                     }
 
@@ -535,7 +553,6 @@ public class MainScene extends JPanel {
         }
 
 
-
         for (int i = 0; i < this.zombies.length; i++) {
             if (this.zombies[i] != null){
                 this.zombies[i].move(this.player.getX(), this.player.getY());
@@ -543,7 +560,7 @@ public class MainScene extends JPanel {
                     if (this.zombies[i].checkCollision(new Rectangle(this.player.getX(), this.player.getY() ,this.player.getPlayerWidth(), this.player.getPlayerHeight()))){
 //                        System.out.println("HIT!");
                         this.player.hurt(this.zombies[i].getHitDamage());
-                        this.hudPanel.hurt(this.zombies[i].getHitDamage());
+                        //this.hudPanel.hurt(this.zombies[i].getHitDamage());
                     }
                 }
 
@@ -551,9 +568,52 @@ public class MainScene extends JPanel {
                     this.zombies[i].setCountedAsKill(true);
                     this.player.playerKill();
                     this.killsHud.updateKills();
+
+                    this.abilityHandler((int) zombies[i].getX(), (int) zombies[i].getY());
                 }
             }
         }
 
+        for (int i = 0; i < this.abilities.length; i++) {
+            if (this.abilities[i] != null){
+                if (this.abilities[i].checkCollision(new Rectangle(this.player.getX(), this.player.getY() ,this.player.getPlayerWidth(), this.player.getPlayerHeight()))){
+                    this.abilities[i].activate();
+                    this.abilities[i] = null;
+                }
+            }
+        }
+
+    }
+
+    private void abilityHandler(int x, int y){
+        this.healthAbilitySpawn --;
+        this.speedAbilitySpawn--;
+        this.sheildAbilitySpawn--;
+        if (this.healthAbilitySpawn == 0) {
+            System.out.println("here");
+            Ability ability = new Ability(x, y, 0, this.player);
+            this.spawnAbility(ability);
+           this.healthAbilitySpawn = this.rnd.nextInt(health1Min, health1Max);
+            //this.healthAbilitySpawn = 1;
+        }
+        if(this.speedAbilitySpawn == 0){
+            Ability ability = new Ability(x, y, 1, this.player);
+            this.spawnAbility(ability);
+            this.speedAbilitySpawn = this.rnd.nextInt(speed1Min, speed1Max);
+        }
+        if(this.sheildAbilitySpawn == 0){
+            Ability ability = new Ability(x, y, 2, this.player);
+            this.spawnAbility(ability);
+            this.sheildAbilitySpawn = this.rnd.nextInt(speed1Min, speed1Max);
+        }
+    }
+
+    private void spawnAbility(Ability ability){
+        for (int i = 0; i < this.abilities.length; i++) {
+            if (this.abilities[i] == null){
+                abilities[i] = ability;
+                break;
+            }
+        }
     }
 }

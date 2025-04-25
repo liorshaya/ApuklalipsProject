@@ -47,6 +47,11 @@ public class HudPanel extends JPanel {
         this.helathBarWidth -= (int) (hitCount * 1.5);
     }
 
+    public void setHealth(int health){
+        this.health = health;
+        this.helathBarWidth = (int) (health * 1.5);
+    }
+
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(Color.RED);

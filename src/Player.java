@@ -10,9 +10,17 @@ public class Player extends Character{
     private int bulletsLeft;
     private boolean isReloading;
     private int health;
+    private int speed;
     private boolean isHitted;
     private boolean isShilded;
     private HudPanel hudPanel;
+
+    private boolean isSpeedAbilityActive = false;
+    private boolean isShiledAbilityActive = false;
+    private boolean isDamageAbilityActive = false;
+
+    private long speedAbilityStartTime = 0;
+    private long shieldAbilityStartTime = 0;
 
 
     private BufferedImage[] deathPlayerFrames;
@@ -24,6 +32,7 @@ public class Player extends Character{
 
 
     private BufferedImage[] walkPlayerFrames;
+    private BufferedImage[] shieldPlayerFrames;
     private int deathFrame = 0;
     private long timeOfDeath = 0;
     private final long deathDelay = 2000;
@@ -35,6 +44,8 @@ public class Player extends Character{
         this.bulletsLeft = 30;
         this.isReloading = false;
         this.health = 100;
+        this.speed = 1;
+        this.isShilded = false;
         this.isHitted = false;
         this.walkPlayerFrames = ImageManager.loadPlayerImage();
     }
@@ -44,24 +55,24 @@ public class Player extends Character{
     }
 
     public void moveRight(){
-        if (this.getX() + PLAYER_WIDTH != this.getWidth()){
-            this.setX(this.getX()+1);;
+        if (this.getX() + PLAYER_WIDTH + this.speed <= this.getWidth()){
+            this.setX(this.getX() + this.speed);
         }
     }
 
     public void moveLeft(){
-        if (this.getX() != 0){
+        if (this.getX() - this.speed >= 0){
             this.setX(this.getX() - this.speed);
         }
     }
 
     public void moveUp(){
-        if (this.getY() != 0) {
+        if (this.getY() - this.speed >= 0) {
             this.setY(this.getY() - this.speed);
         }
     }
     public void moveDown(){
-        if (this.getY() + PLAYER_HEIGHT != this.getHeight()) {
+        if (this.getY() + PLAYER_HEIGHT + this.speed <= this.getHeight()) {
             this.setY(this.getY() + this.speed);
 
         }
@@ -114,9 +125,13 @@ public class Player extends Character{
     }
 
     public void hurt(int damage){
-        this.health -= damage;
-        this.isHitted = true;
-        hitDelay();
+        if (!this.isShilded){
+            System.out.println("health:" + health);
+            this.health -= damage;
+            this.isHitted = true;
+            hitDelay();
+        }
+        this.hudPanel.setHealth(this.health);
     }
 
     private void hitDelay(){
@@ -164,6 +179,7 @@ public class Player extends Character{
 
     public void activateShieldAbility(){
         if (!this.isShiledAbilityActive) {
+            shieldPlayerFrames = ImageManager.loadPlayerShieldImage();
             this.isShiledAbilityActive = true;
             this.isShilded = true;
             this.shieldAbilityStartTime = System.currentTimeMillis();
@@ -184,12 +200,12 @@ public class Player extends Character{
     public void update() {
         long now = System.currentTimeMillis();
 
-        if (isSpeedAbilityActive && now - speedAbilityStartTime >= 10000) {
+        if (isSpeedAbilityActive && now - speedAbilityStartTime >= 30000) {
             this.speed = 1;
             this.isSpeedAbilityActive = false;
         }
 
-        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 10000) {
+        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 30000) {
             this.isShilded = false;
             this.isShiledAbilityActive = false;
         }
@@ -233,7 +249,13 @@ public class Player extends Character{
                 lastFrameTime = currentTime;
             }
 
-            BufferedImage frame = walkPlayerFrames[currentFrame];
+            BufferedImage frame;
+
+            if (isShilded && shieldPlayerFrames != null) {
+                frame = shieldPlayerFrames[currentFrame];
+            } else {
+                frame = walkPlayerFrames[currentFrame];
+            }
             if (frame != null) {
                 int cx = getX() + PLAYER_WIDTH / 2;
                 int cy = getY() + PLAYER_HEIGHT / 2;
