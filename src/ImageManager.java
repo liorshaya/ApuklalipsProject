@@ -308,7 +308,7 @@ public class ImageManager {
     public static void loadShieldAbility() {
         shieldAbility = null;
         try {
-            shieldAbility = ImageIO.read(new File("resources/Abilities/shiledAbility.png"));
+            shieldAbility = ImageIO.read(new File("resources/Abilities/shieldAbility.png"));
         } catch (IOException e) {
             System.out.println("Error loading shieldAbility image.");
         }
