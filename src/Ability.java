@@ -54,6 +54,9 @@ public class Ability {
             if (this.type == TYPE_SPEED) {
                 player.activateSpeedAbility();
             }
+//            if(this.type == TYPE_DAMAGE){
+
+//            }
             this.istaken = true;
         }
     }
