@@ -17,8 +17,7 @@ public class Main {
         MainMenu mainMenu = new MainMenu(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
         window.add(mainMenu);
 
-//        MainScene mainScene = new MainScene(0 ,0,WINDOW_WIDTH , WINDOW_HEIGHT);
-//        window.add(mainScene);
+        ImageManager.loadAll();
 
 
         window.setVisible(true);

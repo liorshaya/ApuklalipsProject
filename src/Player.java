@@ -11,6 +11,7 @@ public class Player extends Character{
     private boolean isReloading;
     private int health;
     private int speed;
+    private int damage = 1;
     private boolean isHitted;
     private boolean isShilded;
     private HudPanel hudPanel;
@@ -21,6 +22,7 @@ public class Player extends Character{
 
     private long speedAbilityStartTime = 0;
     private long shieldAbilityStartTime = 0;
+    private long damageAbilityStartTime = 0;
 
 
     private BufferedImage[] deathPlayerFrames;
@@ -47,7 +49,7 @@ public class Player extends Character{
         this.speed = 1;
         this.isShilded = false;
         this.isHitted = false;
-        this.walkPlayerFrames = ImageManager.loadPlayerImage();
+        this.walkPlayerFrames = ImageManager.getPlayerImage();
     }
 
     public void setHudPanel(HudPanel hudPanel) {
@@ -155,7 +157,7 @@ public class Player extends Character{
 
     public boolean isDead(){
         if(this.health <= 0){
-            this.deathPlayerFrames = ImageManager.loadPlayerDeathImage();
+            this.deathPlayerFrames = ImageManager.getPlayerDeathImage();
         }
         return this.health <= 0;
     }
@@ -166,6 +168,10 @@ public class Player extends Character{
 
     public int getKills(){
         return this.kills;
+    }
+
+    public int getDamage(){
+        return this.damage;
     }
 
     public void activateSpeedAbility(){
@@ -183,6 +189,14 @@ public class Player extends Character{
             this.isShiledAbilityActive = true;
             this.isShilded = true;
             this.shieldAbilityStartTime = System.currentTimeMillis();
+        }
+    }
+
+    public void activateDamageAbility(){
+        if (!this.isDamageAbilityActive) {
+            this.isDamageAbilityActive = true;
+            this.damage = 2;
+            this.damageAbilityStartTime = System.currentTimeMillis();
         }
     }
 
@@ -205,9 +219,14 @@ public class Player extends Character{
             this.isSpeedAbilityActive = false;
         }
 
-        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 30000) {
+        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 10000000) {
             this.isShilded = false;
             this.isShiledAbilityActive = false;
+        }
+
+        if (isDamageAbilityActive && now - damageAbilityStartTime >= 10000000) {
+            this.damage = 1;
+            this.isDamageAbilityActive = false;
         }
     }
 

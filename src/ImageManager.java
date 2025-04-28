@@ -1,16 +1,70 @@
+import jdk.jshell.execution.LoaderDelegate;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class ImageManager {
-    private static BufferedImage background;
+    public static BufferedImage background;
     private static BufferedImage menuBackground;
-    private static BufferedImage startButton;
     private static BufferedImage pauseBackground;
-    private static BufferedImage backBackground;
+    private static BufferedImage howToPlayBackground;
+
+//ZOMBIES
+    private static BufferedImage[] zombieLvl1;
+    private static BufferedImage[] zombieLvl1Death;
+
+    private static BufferedImage[] zombieLvl1Boos;
+    private static BufferedImage[] zombieLvl1BossDeath;
+
+    private static BufferedImage[] zombieLvl2;
+    private static BufferedImage[] zombieLvl2Death;
+
+    private static BufferedImage[] zombieLvl2Boss;
+    private static BufferedImage[] zombieLvl2BossDeath;
+
+    private static BufferedImage[] zombieLvl3Boss;
+    private static BufferedImage[] zombieLvl3BossDeath;
+
+    private static BufferedImage[] zombieLvl4Boss;
+    private static BufferedImage[] zombieLvl4BossDeath;
+
+    private static BufferedImage[] zombieLvl5Boss;
+    private static BufferedImage[] zombieLvl5BossDeath;
+//ZOMBIES
+
+    private static BufferedImage[] walkPlayerFrames;
+    private static BufferedImage[] deathPlayerFrames;
 
 
+    public static void loadAll(){
+        zombieLvl1 = loadZombieLvl1Image();
+        zombieLvl1Death = loadZombieLvl1DeathImage();
+
+        zombieLvl1Boos = loadZombieBossLvl1Image();
+        zombieLvl1BossDeath = loadZombieDeathBossLvl1Image();
+
+        zombieLvl2 = loadZombieLvl2Image();
+        zombieLvl2Death = loadZombieLvl2DeathImage();
+
+        zombieLvl2Boss = loadZombieLvl2BossImage();
+        zombieLvl2BossDeath = loadZombieLvl2BossDeathImage();
+
+        zombieLvl3Boss = loadZombieLvl3BossImage();
+        zombieLvl3BossDeath = loadZombieLvl3BossDeathImage();
+
+        zombieLvl4Boss = loadZombieLvl4BossImage();
+        zombieLvl4BossDeath = loadZombieLvl4BossDeathImage();
+
+        zombieLvl5Boss = loadZombieLvl5BossImage();
+        zombieLvl5BossDeath = loadZombieLvl5BossDeathImage();
+
+        walkPlayerFrames = loadPlayerImage();
+        deathPlayerFrames = loadPlayerDeathImage();
+    }
+
+//BACKGROUNDS
     public static void loadBackground() {
         try {
             background = ImageIO.read(new File("resources/MainBackground/newBackground3.png"));
@@ -49,28 +103,19 @@ public class ImageManager {
 
     public static void loadRulesBackground() {
         try {
-            backBackground = ImageIO.read(new File("resources/RulesMenu/HowToPlayBackground.png"));
+            howToPlayBackground = ImageIO.read(new File("resources/RulesMenu/HowToPlayBackground.png"));
         } catch (IOException e) {
             System.out.println("Error");
         }
     }
 
     public static BufferedImage getRulesBackground() {
-        return backBackground;
+        return howToPlayBackground;
     }
+//BACKGROUNDS
 
-//    public static void loadStartButton() {
-//        try {
-//            startButton = ImageIO.read(new File("resources/MainMenu/OldStartButton.png"));
-//        } catch (IOException e) {
-//            System.out.println("Error");
-//        }
-//    }
-//
-//    public static BufferedImage getStartButton() {
-//        return startButton;
-//    }
 
+//LOAD_PLAYER
     public static BufferedImage[] loadPlayerImage() {
         BufferedImage[] walkPlayerFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
@@ -85,6 +130,11 @@ public class ImageManager {
         return walkPlayerFrames;
     }
 
+    public static BufferedImage[] getPlayerImage(){
+        return walkPlayerFrames;
+    }
+
+
     public static BufferedImage[] loadPlayerDeathImage() {
         BufferedImage[] walkPlayerDeathFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
@@ -97,7 +147,17 @@ public class ImageManager {
         return walkPlayerDeathFrames;
     }
 
-    public static BufferedImage[] loadZombieImage() {
+    public static BufferedImage[] getPlayerDeathImage(){
+        return deathPlayerFrames;
+    }
+//LOAD_PLAYER
+
+
+
+
+//LOAD_ZOMBIES
+
+    public static BufferedImage[] loadZombieLvl1Image() {
         BufferedImage[] walkZombieFrames = new BufferedImage[9];
         for (int i = 0; i < 9; i++) {
             try {
@@ -109,7 +169,12 @@ public class ImageManager {
         return walkZombieFrames;
     }
 
-    public static BufferedImage[] loadZombieDeathImage() {
+    public static BufferedImage[] getZombieLvl1(){
+        return zombieLvl1;
+    }
+
+
+    public static BufferedImage[] loadZombieLvl1DeathImage() {
         BufferedImage[] walkZombieDeathFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
             try {
@@ -120,6 +185,12 @@ public class ImageManager {
         }
         return walkZombieDeathFrames;
     }
+
+    public static BufferedImage[] getZombieLvl1Death(){
+        return zombieLvl1Death;
+    }
+
+
 
     public static BufferedImage[] loadZombieBossLvl1Image() {
         BufferedImage[] walkZombieBossLvl1Frames = new BufferedImage[9];
@@ -133,6 +204,11 @@ public class ImageManager {
         return walkZombieBossLvl1Frames;
     }
 
+    public static BufferedImage[] getZombieBossLvl1Image(){
+        return zombieLvl1Boos;
+    }
+
+
     public static BufferedImage[] loadZombieDeathBossLvl1Image() {
         BufferedImage[] deathZombieBossLvl1Frames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
@@ -144,6 +220,11 @@ public class ImageManager {
         }
         return deathZombieBossLvl1Frames;
     }
+
+    public static BufferedImage[] getZombieDeathBossLvl1Image(){
+        return zombieLvl1BossDeath;
+    }
+
 
     public static BufferedImage[] loadZombieLvl2Image() {
         BufferedImage[] walkZombieLvl2Frames = new BufferedImage[9];
@@ -157,6 +238,11 @@ public class ImageManager {
         return walkZombieLvl2Frames;
     }
 
+    public static BufferedImage[] getZombieLvl2Image(){
+        return zombieLvl2;
+    }
+
+
     public static BufferedImage[] loadZombieLvl2DeathImage() {
         BufferedImage[] deathZombieLvl2Frames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
@@ -168,6 +254,11 @@ public class ImageManager {
         }
         return deathZombieLvl2Frames;
     }
+
+    public static BufferedImage[] getZombieLvl2DeathImage(){
+        return zombieLvl2Death;
+    }
+
 
     public static BufferedImage[] loadZombieLvl2BossImage() {
         BufferedImage[] walkZombieLvl2BossFrames = new BufferedImage[9];
@@ -181,6 +272,11 @@ public class ImageManager {
         return walkZombieLvl2BossFrames;
     }
 
+    public static BufferedImage[] getZombieLvl2BossImage(){
+        return zombieLvl2Boss;
+    }
+
+
     public static BufferedImage[] loadZombieLvl2BossDeathImage() {
         BufferedImage[] deathZombieLvl2BossFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
@@ -192,6 +288,11 @@ public class ImageManager {
         }
         return deathZombieLvl2BossFrames;
     }
+
+    public static BufferedImage[] getZombieLvl2BossDeathImage(){
+        return zombieLvl2BossDeath;
+    }
+
 
     public static BufferedImage[] loadZombieLvl3BossImage() {
         BufferedImage[] walkZombieLvl3BossFrames = new BufferedImage[8];
@@ -205,6 +306,11 @@ public class ImageManager {
         return walkZombieLvl3BossFrames;
     }
 
+    public static BufferedImage[] getZombieLvl3BossImage(){
+        return zombieLvl3Boss;
+    }
+
+
     public static BufferedImage[] loadZombieLvl3BossDeathImage() {
         BufferedImage[] deathZombieLvl3BossFrames = new BufferedImage[10];
         for (int i = 0; i < 10; i++) {
@@ -216,6 +322,11 @@ public class ImageManager {
         }
         return deathZombieLvl3BossFrames;
     }
+
+    public static BufferedImage[] getZombieLvl3BossDeathImage(){
+        return zombieLvl3BossDeath;
+    }
+
 
     public static BufferedImage[] loadZombieLvl4BossImage() {
         BufferedImage[] walkZombieLvl4BossFrames = new BufferedImage[8];
@@ -229,6 +340,11 @@ public class ImageManager {
         return walkZombieLvl4BossFrames;
     }
 
+    public static BufferedImage[] getZombieLvl4BossImage(){
+        return zombieLvl4Boss;
+    }
+
+
     public static BufferedImage[] loadZombieLvl4BossDeathImage() {
         BufferedImage[] deathZombieLvl4BossFrames = new BufferedImage[10];
         for (int i = 0; i < 10; i++) {
@@ -241,6 +357,13 @@ public class ImageManager {
         return deathZombieLvl4BossFrames;
     }
 
+    public static BufferedImage[] getZombieLvl4BossDeathImage(){
+        return zombieLvl4BossDeath;
+    }
+
+
+
+
     public static BufferedImage[] loadZombieLvl5BossImage() {
         BufferedImage[] walkZombieLvl5BossFrames = new BufferedImage[8];
         for (int i = 0; i < 8; i++) {
@@ -252,6 +375,11 @@ public class ImageManager {
         }
         return walkZombieLvl5BossFrames;
     }
+
+    public static BufferedImage[] getZombieLvl5BossImage(){
+        return zombieLvl5Boss;
+    }
+
 
     public static BufferedImage[] loadZombieLvl5BossDeathImage() {
         BufferedImage[] deathZombieLvl5BossFrames = new BufferedImage[14];
@@ -270,10 +398,19 @@ public class ImageManager {
         return deathZombieLvl5BossFrames;
     }
 
-    //ABILITIES
+    public static BufferedImage[] getZombieLvl5BossDeathImage(){
+        return zombieLvl5BossDeath;
+    }
+//LOAD_ZOMBIES
+
+
+
+//ABILITIES
     private static BufferedImage healthAbility;
     private static BufferedImage speedAbility;
     private static BufferedImage shieldAbility;
+    private static BufferedImage damageAbility;
+
 
 
     public static void loadHealthAbility() {
@@ -305,6 +442,7 @@ public class ImageManager {
         return speedAbility;
     }
 
+
     public static void loadShieldAbility() {
         shieldAbility = null;
         try {
@@ -319,6 +457,22 @@ public class ImageManager {
         return shieldAbility;
     }
 
+
+    public static void loadDamageAbility() {
+        damageAbility = null;
+        try {
+            damageAbility = ImageIO.read(new File("resources/Abilities/damageAbility.png"));
+        } catch (IOException e) {
+            System.out.println("Error loading damageAbility image.");
+        }
+
+    }
+
+    public static BufferedImage getDamageAbility() {
+        return damageAbility;
+    }
+
+
     public static BufferedImage[] loadPlayerShieldImage() {
         BufferedImage[] shieldPlayerFrames = new BufferedImage[6];
         for (int i = 0; i < 6; i++) {
@@ -330,4 +484,8 @@ public class ImageManager {
         }
         return shieldPlayerFrames;
     }
+
+
+//ABILITIES
+
 }

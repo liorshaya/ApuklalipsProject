@@ -63,7 +63,7 @@ public abstract class Zombie{
 
 
     public void move(int playerX , int playerY){
-        this.angle = Math.atan2(playerY + zombieHeight /2 - this.y, playerX + zombieWidth /2 - this.x);
+        this.angle = Math.atan2(playerY + zombieHeight / 2 - this.y, playerX + zombieWidth / 2 - this.x);
         this.dx = Math.cos(angle) * speed;
         this.dy = Math.sin(angle) * speed;
 
@@ -88,12 +88,12 @@ public abstract class Zombie{
         return this.hitDamage;
     }
 
-    public void zombieHurt(){
-        this.healthBarWidth -= (staticHealthBarWidth /this.totalHealth);
+    public void zombieHurt(int damage){
+        this.healthBarWidth -= (staticHealthBarWidth / this.totalHealth * damage);
     }
 
     public boolean isDead(){
-        return this.hitCounter == 0;
+        return this.hitCounter <= 0;
     }
 
     public boolean isCountedAsKill() {
@@ -178,9 +178,9 @@ public abstract class Zombie{
         return toBeRemoved;
     }
 
-    public void bulletHit(){
-        this.hitCounter--;
-        if(hitCounter == 0){
+    public void bulletHit(int damage){
+        this.hitCounter -= damage;
+        if(hitCounter <= 0){
             this.deathZombieFrames = this.tempDeathZombieFrames;
             this.deathFrame = 0;
             this.currentFrame = 0;

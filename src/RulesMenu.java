@@ -47,7 +47,7 @@ public static final String introText =
         this.rulesDescription.setEditable(false);
         this.rulesDescription.setOpaque(false);
         this.rulesDescription.setText(introText);
-        this.rulesDescription.setForeground(new Color(0xC8C1C1));
+        this.rulesDescription.setForeground(new Color(0xBFB4B4));
         this.rulesDescription.setBounds(width/2 - 380,420,1500,300);
         this.rulesDescription.setFont(descriptionFont);
 

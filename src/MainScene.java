@@ -51,13 +51,13 @@ public class MainScene extends JPanel {
     private int healthAbilitySpawn = 10;
     private final int health1Min = 20, health1Max = 40;
 
-    private int sheildAbilitySpawn = 1;
+    private int sheildAbilitySpawn = 2;
     private final int sheild1Min = 30, sheild1Max = 50;
 
     private int speedAbilitySpawn = 5;
     private final int speed1Min = 20, speed1Max = 50;
 
-    private int damageAbilitySpawn = 60;
+    private int damageAbilitySpawn = 1;
     private final int damage1Min = 40, damage1Max = 80;
     //ABILITIES
     private int killsSinceLastAbility = 0;
@@ -509,9 +509,9 @@ public class MainScene extends JPanel {
                     for (int j = 0; j < this.zombies.length; j++) {
                         if (zombies[j] != null && !zombies[j].isDead()){
                             if (this.bullets[i].checkCollision(new Rectangle((int) zombies[j].getX(), (int) zombies[j].getY(), zombies[j].getZombieWidth(), zombies[j].getZombieHeight()))){
-                                zombies[j].bulletHit();
+                                zombies[j].bulletHit(this.player.getDamage());
 //                                System.out.println("botHit!");
-                                this.zombies[j].zombieHurt();
+                                this.zombies[j].zombieHurt(this.player.getDamage());
                             }
                         }
                     }
@@ -564,7 +564,7 @@ public class MainScene extends JPanel {
                     }
                 }
 
-                if (zombies[i].getHitCounter() == 0 && !zombies[i].isCountedAsKill()){
+                if (zombies[i].getHitCounter() <= 0 && !zombies[i].isCountedAsKill()){
                     this.zombies[i].setCountedAsKill(true);
                     this.player.playerKill();
                     this.killsHud.updateKills();
@@ -589,6 +589,7 @@ public class MainScene extends JPanel {
         this.healthAbilitySpawn --;
         this.speedAbilitySpawn--;
         this.sheildAbilitySpawn--;
+        this.damageAbilitySpawn--;
         if (this.healthAbilitySpawn == 0) {
             System.out.println("here");
             Ability ability = new Ability(x, y, 0, this.player);
@@ -605,6 +606,11 @@ public class MainScene extends JPanel {
             Ability ability = new Ability(x, y, 2, this.player);
             this.spawnAbility(ability);
             this.sheildAbilitySpawn = this.rnd.nextInt(speed1Min, speed1Max);
+        }
+        if(this.damageAbilitySpawn == 0){
+            Ability ability = new Ability(x, y, 3, this.player);
+            this.spawnAbility(ability);
+            this.damageAbilitySpawn = this.rnd.nextInt(damage1Min, damage1Max);
         }
     }
 

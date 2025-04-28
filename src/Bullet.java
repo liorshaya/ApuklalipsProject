@@ -10,6 +10,9 @@ public class Bullet {
     private double dy;
     private final double SPEED = 20;
     private boolean isHit;
+    private int bulletDamage;
+
+
 
 
     public Bullet(int x, int y, int targetX, int targetY){
@@ -20,11 +23,14 @@ public class Bullet {
         double angle = Math.atan2(targetY - y, targetX - x);
         this.dx = Math.cos(angle) * SPEED;
         this.dy = Math.sin(angle) * SPEED;
+
+        this.bulletDamage = 1;
     }
 
     public void update(){
         this.x += dx;
         this.y += dy;
+
     }
 
     public boolean checkCollision(Rectangle zombieRect){
@@ -65,4 +71,5 @@ public class Bullet {
     public boolean getIsHit() {
         return isHit;
     }
+
 }

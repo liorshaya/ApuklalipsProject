@@ -41,6 +41,10 @@ public class Ability {
             ImageManager.loadShieldAbility();
             this.abilityImg = ImageManager.getShieldAbility();
         }
+        if (type == TYPE_DAMAGE){
+            ImageManager.loadDamageAbility();
+            this.abilityImg = ImageManager.getDamageAbility();
+        }
     }
 
     public void activate(){
@@ -54,9 +58,10 @@ public class Ability {
             if (this.type == TYPE_SPEED) {
                 player.activateSpeedAbility();
             }
-//            if(this.type == TYPE_DAMAGE){
+           if(this.type == TYPE_DAMAGE){
+               player.activateDamageAbility();
+           }
 
-//            }
             this.istaken = true;
         }
     }
