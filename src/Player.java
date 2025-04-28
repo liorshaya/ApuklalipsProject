@@ -219,12 +219,12 @@ public class Player extends Character{
             this.isSpeedAbilityActive = false;
         }
 
-        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 10000000) {
+        if (isShiledAbilityActive && now - shieldAbilityStartTime >= 20000) {
             this.isShilded = false;
             this.isShiledAbilityActive = false;
         }
 
-        if (isDamageAbilityActive && now - damageAbilityStartTime >= 10000000) {
+        if (isDamageAbilityActive && now - damageAbilityStartTime >= 20000) {
             this.damage = 1;
             this.isDamageAbilityActive = false;
         }
