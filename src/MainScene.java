@@ -48,17 +48,17 @@ public class MainScene extends JPanel {
 
 
     //ABILITIES
-    private int healthAbilitySpawn = 10;
+    private int healthAbilitySpawn = 20;
     private final int health1Min = 20, health1Max = 40;
 
-    private int sheildAbilitySpawn = 2;
-    private final int sheild1Min = 30, sheild1Max = 50;
+    private int sheildAbilitySpawn = 40;
+    private final int sheild1Min = 30, sheild1Max = 60;
 
-    private int speedAbilitySpawn = 5;
-    private final int speed1Min = 20, speed1Max = 50;
+    private int speedAbilitySpawn = 10;
+    private final int speed1Min = 20, speed1Max = 30;
 
-    private int damageAbilitySpawn = 1;
-    private final int damage1Min = 40, damage1Max = 80;
+    private int damageAbilitySpawn = 30;
+    private final int damage1Min = 30, damage1Max = 60;
     //ABILITIES
     private int killsSinceLastAbility = 0;
 
@@ -591,7 +591,7 @@ public class MainScene extends JPanel {
         this.sheildAbilitySpawn--;
         this.damageAbilitySpawn--;
         if (this.healthAbilitySpawn == 0) {
-            System.out.println("here");
+            //System.out.println("here");
             Ability ability = new Ability(x, y, 0, this.player);
             this.spawnAbility(ability);
            this.healthAbilitySpawn = this.rnd.nextInt(health1Min, health1Max);
@@ -605,7 +605,7 @@ public class MainScene extends JPanel {
         if(this.sheildAbilitySpawn == 0){
             Ability ability = new Ability(x, y, 2, this.player);
             this.spawnAbility(ability);
-            this.sheildAbilitySpawn = this.rnd.nextInt(speed1Min, speed1Max);
+            this.sheildAbilitySpawn = this.rnd.nextInt(sheild1Min, sheild1Max);
         }
         if(this.damageAbilitySpawn == 0){
             Ability ability = new Ability(x, y, 3, this.player);
