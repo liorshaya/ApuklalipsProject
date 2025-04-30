@@ -19,6 +19,8 @@ public class Main {
 
         ImageManager.loadAll();
 
+        SoundManager.loadAll();
+
 
         window.setVisible(true);
     }

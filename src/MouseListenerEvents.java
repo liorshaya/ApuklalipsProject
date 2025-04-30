@@ -23,6 +23,7 @@ public class MouseListenerEvents extends MouseAdapter implements MouseMotionList
                     bullets[i] = new Bullet(player.getPlayerCenterX(), player.getPlayerCenterY(), mouseX, mouseY);
                     player.shoot();
                     hudPanel.shoot();
+                    SoundManager.playShootSound();
                 }
                 break;
             }

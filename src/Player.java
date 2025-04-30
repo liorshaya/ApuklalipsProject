@@ -39,6 +39,7 @@ public class Player extends Character{
     private long timeOfDeath = 0;
     private final long deathDelay = 2000;
 
+    private boolean isDeathSoundPlayed = false;
 
     public Player(int x, int y, int width, int height, HudPanel hudPanel){
         super(x, y, width, height);
@@ -127,10 +128,13 @@ public class Player extends Character{
     }
 
     public void hurt(int damage){
-        if (!this.isShilded){
+        if (!this.isShilded && this.health > 0){
             System.out.println("health:" + health);
             this.health -= damage;
             this.isHitted = true;
+            if(this.health >= 10){
+                SoundManager.playHurtSound();
+            }
             hitDelay();
         }
         this.hudPanel.setHealth(this.health);
@@ -157,7 +161,11 @@ public class Player extends Character{
 
     public boolean isDead(){
         if(this.health <= 0){
-            this.deathPlayerFrames = ImageManager.getPlayerDeathImage();
+            if (!isDeathSoundPlayed) {
+                SoundManager.playDeathSound();
+                this.deathPlayerFrames = ImageManager.getPlayerDeathImage();
+                this.isDeathSoundPlayed = true;
+            }
         }
         return this.health <= 0;
     }
