@@ -166,6 +166,7 @@ public class Player extends Character{
                 this.deathPlayerFrames = ImageManager.getPlayerDeathImage();
                 this.isDeathSoundPlayed = true;
             }
+            return true;
         }
         return this.health <= 0;
     }
